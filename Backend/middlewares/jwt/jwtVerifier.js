@@ -1,4 +1,4 @@
-export const jwtVerify = (req, res, next) => {
+export const jwtVerifier = (req, res, next) => {
   const token = req.cookies.jwt;
 
   try {
