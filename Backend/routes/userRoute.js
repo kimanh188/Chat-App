@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   loginGetController,
+  logoutPostController,
   registerPostController,
 } from "../controllers/userController.js";
 import { emailValidation } from "../middlewares/validation/emailValidation.js";
@@ -28,3 +29,5 @@ userRouter.get(
   jwtCreator,
   loginGetController
 );
+
+userRouter.post("/logout", logoutPostController);

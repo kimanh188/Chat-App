@@ -69,3 +69,14 @@ export async function loginGetController(req, res, next) {
     next(errorCreator(401, "User not found"));
   }
 }
+
+export function logoutPostController(req, res, next) {
+  res.clearCookie("jwt");
+
+  res.status(200).json({
+    answer: {
+      code: 200,
+      message: "Logged out",
+    },
+  });
+}
