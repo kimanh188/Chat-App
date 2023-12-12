@@ -7,6 +7,6 @@ import { jwtVerifier } from "../middlewares/jwt/jwtVerifier.js";
 
 export const messageRouter = Router();
 
-messageRouter.get("/messages", jwtVerifier, getAllMessagesController);
+messageRouter.get("/", jwtVerifier, getAllMessagesController);
 
-messageRouter.get("/messages/:id", jwtVerifier, getAConversationController);
+messageRouter.get("/:id", jwtVerifier, getAConversationController);

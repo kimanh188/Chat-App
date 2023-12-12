@@ -8,6 +8,7 @@ import {
   mongoErrorListener,
 } from "./configs/db.connect.js";
 import { userRouter } from "./routes/userRoute.js";
+import { messageRouter } from "./routes/messageRoute.js";
 config();
 
 mongoErrorListener();
@@ -20,6 +21,7 @@ app.use(json());
 app.use(cookieParser());
 
 app.use("/user", userRouter);
+app.use("/messages", messageRouter);
 
 app.all("*", (req, res, next) => {
   res.status(404).json({
