@@ -19,14 +19,14 @@ app.use(json());
 
 app.use("/user", userRouter);
 
-/* app.all("*", (req, res, next) => {
+app.all("*", (req, res, next) => {
   res.status(404).json({
     answer: {
       code: 404,
       message: "Page not found",
     },
   });
-}); */
+});
 
 app.use((error, req, res, next) => {
   res.status(error.code || 500).json({

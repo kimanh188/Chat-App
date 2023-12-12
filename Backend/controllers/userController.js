@@ -12,8 +12,9 @@ export async function signUpPostController(req, res, next) {
     });
 
     const newUserObject = newUser.toObject();
-    console.log(newUserObject);
+    //console.log(newUserObject);
     delete newUserObject.password;
+    newUserObject.jwt = req.jwt;
 
     res.status(200).json({
       answer: {
