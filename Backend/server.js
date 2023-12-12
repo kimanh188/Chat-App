@@ -6,6 +6,7 @@ import {
   mongoDisconnectListener,
   mongoErrorListener,
 } from "./configs/db.connect.js";
+import { userRouter } from "./routes/userRoute.js";
 config();
 
 mongoErrorListener();
@@ -15,6 +16,26 @@ await mongoConnect();
 
 const app = express();
 app.use(json());
+
+app.use("/user", userRouter);
+
+app.use("/test", (req, res) => {
+  res.status(200).json({
+    answer: {
+      code: 200,
+      message: "Hello world",
+    },
+  });
+});
+
+app.all("*", (req, res) => {
+  res.status(404).json({
+    answer: {
+      code: 404,
+      message: "Page not found",
+    },
+  });
+});
 
 app.use((error, req, res, next) => {
   res.status(error.code || 500).json({
