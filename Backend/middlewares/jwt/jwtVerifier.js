@@ -2,9 +2,9 @@ import jwt from "jsonwebtoken";
 import { errorCreator } from "../../lib/errorCreator.js";
 
 export const jwtVerifier = (req, res, next) => {
-  console.log(req.headers);
+  //console.log(req.headers);
   const token = req.cookies.jwt;
-  console.log(req.cookies.jwt);
+  console.log(token);
 
   try {
     const decoded = jwt.verify(token, process.env.SECURITY_KEY);
