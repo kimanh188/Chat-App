@@ -12,9 +12,8 @@ export async function registerPostController(req, res, next) {
     });
 
     const newUserObject = newUser.toObject();
-    console.log(newUserObject);
+
     delete newUserObject.password;
-    //newUserObject.jwt = req.jwt;
 
     res.status(200).json({
       answer: {
@@ -71,12 +70,17 @@ export async function loginGetController(req, res, next) {
 }
 
 export function logoutPostController(req, res, next) {
-  res.clearCookie("jwt");
+  try {
+    res.clearCookie("jwt");
 
-  res.status(200).json({
-    answer: {
-      code: 200,
-      message: "Logged out",
-    },
-  });
+    res.status(200).json({
+      answer: {
+        code: 200,
+        message: "Logged out",
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    next(errorCreator(500, "Internal server error"));
+  }
 }
