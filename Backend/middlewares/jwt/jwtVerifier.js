@@ -10,9 +10,12 @@ export const jwtVerifier = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.SECURITY_KEY);
     console.log("Token valid:", decoded);
 
-    req.id = decoded.id;
-    req.email = decoded.email;
-    req.username = decoded.username;
+    const { email } = decoded;
+
+    req.email = email;
+
+    console.log(req.id, req.email, req.username);
+
     next();
   } catch (error) {
     console.log("Token verification failed ", error.message);

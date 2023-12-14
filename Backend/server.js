@@ -1,6 +1,7 @@
 import express, { json } from "express";
 import { config } from "dotenv";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import {
   mongoConnect,
   mongoConnectListener,
@@ -19,6 +20,7 @@ await mongoConnect();
 const app = express();
 app.use(json());
 app.use(cookieParser());
+app.use(cors());
 
 app.use("/user", userRouter);
 app.use("/messages", messageRouter);
