@@ -2,7 +2,7 @@ import Router from "express";
 import {
   getAllMessagesController,
   getAConversationController,
-} from "../controllers/messageController.js";
+} from "../controllers/chatController.js";
 import { jwtVerifier } from "../middlewares/jwt/jwtVerifier.js";
 
 export const chatRouter = Router();

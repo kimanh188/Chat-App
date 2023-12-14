@@ -1,6 +1,10 @@
+import fs from "fs/promises";
+import { errorCreator } from "../lib/errorCreator.js";
+
 export function profileGetController(req, res, next) {
   try {
-    const userInfo = req.user.toObject();
+    const user = req.user;
+    const userInfo = user.toObject();
     delete userInfo.password;
 
     res.status(200).json({
@@ -53,6 +57,11 @@ export async function uploadProfileImgPostController(req, res, next) {
 
     if (!file) {
       return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    if (user.profileImg) {
+      const prevImgPath = user.profileImg;
+      await fs.unlink(prevImgPath);
     }
 
     user.profileImg = file.path;
