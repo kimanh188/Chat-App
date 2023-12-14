@@ -5,8 +5,8 @@ import {
 } from "../controllers/messageController.js";
 import { jwtVerifier } from "../middlewares/jwt/jwtVerifier.js";
 
-export const messageRouter = Router();
+export const chatRouter = Router();
 
-messageRouter.get("/", jwtVerifier, getAllMessagesController);
+chatRouter.get("/", jwtVerifier, getAllMessagesController);
 
-messageRouter.get("/:id", jwtVerifier, getAConversationController);
+chatRouter.get("/:id", jwtVerifier, getAConversationController);

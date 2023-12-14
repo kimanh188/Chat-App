@@ -84,3 +84,21 @@ export function logoutPostController(req, res, next) {
     next(errorCreator(500, "Internal server error"));
   }
 }
+
+export function profileGetController(req, res, next) {
+  try {
+    const userInfo = req.user.toObject();
+    delete userInfo.password;
+
+    res.status(200).json({
+      answer: {
+        code: 200,
+        message: "Retrieve User Profile",
+        data: userInfo,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    next(errorCreator(500, "Internal server error"));
+  }
+}
