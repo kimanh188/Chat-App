@@ -3,7 +3,6 @@ import { errorCreator } from "../../lib/errorCreator.js";
 import { UserModel } from "../../models/userModel.js";
 
 export const jwtVerifier = async (req, res, next) => {
-  //console.log(req.headers);
   const token = req.cookies.jwt;
 
   if (!token) {
@@ -12,10 +11,8 @@ export const jwtVerifier = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.SECURITY_KEY);
-    console.log("Token valid:", decoded);
 
     const { email } = decoded;
-    console.log("Email:", email);
 
     const user = await UserModel.findOne({ email: email });
     if (!user) {
