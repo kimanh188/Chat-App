@@ -11,7 +11,7 @@ export const profileRouter = Router();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads");
+    cb(null, "./uploads/profileImgs");
   },
   filename(req, file, cb) {
     cb(null, file.originalname);
