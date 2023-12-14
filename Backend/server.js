@@ -9,6 +9,7 @@ import {
   mongoErrorListener,
 } from "./configs/db.connect.js";
 import { userRouter } from "./routes/userRoute.js";
+import { profileRouter } from "./routes/profileRoute.js";
 import { chatRouter } from "./routes/chatRoute.js";
 config();
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use(cors());
 
 app.use("/user", userRouter);
+app.use("/profile", profileRouter);
 app.use("/chat", chatRouter);
 
 app.all("*", (req, res, next) => {
