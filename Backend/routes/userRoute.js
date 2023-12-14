@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  changePasswordPutController,
   loginGetController,
   logoutPostController,
   profileGetController,
@@ -35,3 +36,9 @@ userRouter.get(
 userRouter.post("/logout", logoutPostController);
 
 userRouter.get("/profile", jwtVerifier, profileGetController);
+
+userRouter.put(
+  "/profile/change-password",
+  jwtVerifier,
+  changePasswordPutController
+);

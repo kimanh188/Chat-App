@@ -102,3 +102,33 @@ export function profileGetController(req, res, next) {
     next(errorCreator(500, "Internal server error"));
   }
 }
+
+export async function changePasswordPutController(req, res, next) {
+  try {
+    const user = req.user;
+    const { currentPassword, newPassword } = req.body;
+
+    const isPasswordCorrect = await user.auth(currentPassword);
+    if (!isPasswordCorrect) {
+      return res.status(401).json({
+        answer: {
+          code: 401,
+          message: "Current password incorrect",
+        },
+      });
+    } else {
+      user.password = newPassword;
+      await user.save();
+
+      res.status(200).json({
+        answer: {
+          code: 200,
+          message: "Password changed",
+        },
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    next(errorCreator(500, "Internal server error"));
+  }
+}

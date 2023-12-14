@@ -20,6 +20,8 @@ const userSchema = new Schema({
     required: true,
     trim: true,
   },
+
+  profileImg: String,
 });
 
 // Hash password before saving to database
