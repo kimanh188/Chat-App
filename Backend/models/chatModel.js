@@ -5,34 +5,22 @@ const chatSchema = new Schema(
     name: {
       type: String,
       trim: true,
+      required: true,
     },
 
-    isGroup: {
-      type: Boolean,
-      default: false,
-    },
-
-    groupAdmin: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-    },
-
-    users: [
+    members: [
       {
         type: Schema.Types.ObjectId,
-        ref: "user",
+        ref: "UserModel",
       },
     ],
 
-    latestMessage: {
-      type: Schema.Types.ObjectId,
-      ref: "message",
-    },
-
-    message: {
-      type: String,
-      required: true,
-    },
+    messages: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "MessageModel",
+      },
+    ],
   },
   {
     timestamps: true,

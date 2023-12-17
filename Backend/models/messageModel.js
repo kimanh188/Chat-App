@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const messageSchema = new Schema(
   {
-    content: {
+    text: {
       type: String,
       trim: true,
       required: true,
@@ -10,12 +10,7 @@ const messageSchema = new Schema(
 
     sender: {
       type: Schema.Types.ObjectId,
-      ref: "user",
-    },
-
-    chat: {
-      type: Schema.Types.ObjectId,
-      ref: "chat",
+      ref: "UserModel",
     },
   },
   {
