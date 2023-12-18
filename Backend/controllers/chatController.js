@@ -6,7 +6,7 @@ export async function getAllMessagesController(req, res, next) {
   try {
     const user = req.user;
     const userName = user.username;
-    const userId = user._id.toString();
+    const userId = user._id;
 
     // Retrieve all messages from database
     const chats = await ChatModel.find({
@@ -21,12 +21,15 @@ export async function getAllMessagesController(req, res, next) {
         },
       })
       .sort({ updatedAt: -1 });
+    console.log(chats);
 
     const allMessages = [];
 
     chats.forEach((chat) => {
       allMessages.push(...chat.messages);
     });
+
+    console.log(chats);
 
     if (allMessages.length === 0) {
       return res.status(200).json({
