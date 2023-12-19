@@ -1,9 +1,7 @@
-import "./App.css";
-
 function App() {
   return (
     <>
-      <h1>Chat App</h1>
+      <h1 className="bg-red-500 font-bold underline">Chat App</h1>
     </>
   );
 }
