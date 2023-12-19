@@ -1,41 +1,28 @@
-import { ChatModel } from "../models/chatModel.js";
+import mongoose from "mongoose";
 import { MessageModel } from "../models/messageModel.js";
 import { errorCreator } from "../lib/errorCreator.js";
 
-export async function getAllMessagesController(req, res, next) {
+export async function getAllConversationController(req, res, next) {
   try {
-    const user = req.user;
-    const userName = user.username;
-    const userId = user._id;
+    // Access user information from req object
+    const thisUserId = req.user._id;
+    console.log(thisUserId);
+    const userName = req.user.username;
+    console.log(userName);
 
-    // Retrieve all messages from database
-    const chats = await ChatModel.find({
-      members: { $in: [userId] },
-    })
-      .populate({
-        path: "messages",
-        populate: {
-          path: "sender",
-          model: "UserModel",
-          select: "username",
-        },
-      })
-      .sort({ updatedAt: -1 });
-    console.log(chats);
-
-    const allMessages = [];
-
-    chats.forEach((chat) => {
-      allMessages.push(...chat.messages);
+    // Retrieve all conversations of the user
+    const allMessages = await MessageModel.find({
+      $or: [{ sender: thisUserId }, { recipient: thisUserId }],
+    }).sort({ createdAt: -1 });
+    allMessages.forEach((message) => {
+      console.log(message.message);
     });
 
-    console.log(chats);
-
-    if (allMessages.length === 0) {
-      return res.status(200).json({
+    if (!allMessages || allMessages.length === 0) {
+      return res.status(400).json({
         answer: {
-          code: 200,
-          message: `No messages found for user ${userName}`,
+          code: 400,
+          message: "No messages found",
         },
       });
     }
@@ -43,7 +30,7 @@ export async function getAllMessagesController(req, res, next) {
     res.status(200).json({
       answer: {
         code: 200,
-        message: `All messages of user ${userName} retrieved`,
+        message: `All messages of ${userName} retrieved`,
         data: allMessages,
       },
     });
@@ -55,13 +42,15 @@ export async function getAllMessagesController(req, res, next) {
 
 export async function getAConversationController(req, res, next) {
   try {
-    // Access user information from req object (req.id, req.email, req.username)
-    const thisUserId = req.user._id.toString();
+    // Access user information from req object
+    const thisUserId = req.user._id;
     console.log(thisUserId);
-    const selectedUserId = req.params.id;
+
+    const { ObjectId } = mongoose.Types;
+    const selectedUserId = new ObjectId(req.params.id);
     console.log(selectedUserId);
 
-    if (thisUserId === selectedUserId) {
+    if (thisUserId.equals(selectedUserId)) {
       return res.status(400).json({
         answer: {
           code: 400,
@@ -80,17 +69,20 @@ export async function getAConversationController(req, res, next) {
     }
 
     // Retrieve conversation with the specified user
-    const conversation = await ChatModel.findOne({
-      isGroup: false,
-      members: { $all: [thisUserId, selectedUserId] },
+    const conversation = await MessageModel.find({
+      $or: [
+        { sender: thisUserId, recipient: selectedUserId },
+        { sender: selectedUserId, recipient: thisUserId },
+      ],
     }).sort({ createdAt: -1 });
     console.log(conversation);
 
     if (!conversation) {
       //create new conversation
-      const newConversation = await ChatModel.create({
-        isGroup: false,
-        members: [thisUserId, selectedUserId],
+      const newConversation = await MessageModel.create({
+        sender: thisUserId,
+        recipient: selectedUserId,
+        message: "Hi 👋",
       });
       await newConversation.save();
 

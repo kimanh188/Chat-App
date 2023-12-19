@@ -1,21 +1,19 @@
 import { Schema, model } from "mongoose";
 
-const messageSchema = new Schema(
-  {
-    text: {
-      type: String,
-      trim: true,
-      required: true,
-    },
-
-    sender: {
-      type: Schema.Types.ObjectId,
-      ref: "UserModel",
-    },
+const messageSchema = new Schema({
+  sender: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
   },
-  {
-    timestamps: true,
-  }
-);
+  recipient: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
+  message: String,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
 export const MessageModel = model("message", messageSchema);

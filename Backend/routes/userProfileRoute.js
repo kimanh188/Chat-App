@@ -4,7 +4,7 @@ import {
   changePasswordPutController,
   profileGetController,
   uploadProfileImgPostController,
-} from "../controllers/profileController.js";
+} from "../controllers/userProfileController.js";
 import { jwtVerifier } from "../middlewares/jwt/jwtVerifier.js";
 
 export const profileRouter = Router();
