@@ -7,6 +7,7 @@ export async function getAllConversationController(req, res, next) {
     // Access user information from req object
     const thisUserId = req.user._id;
     console.log(thisUserId);
+    const thisUserIdObject = new mongoose.Types.ObjectId(thisUserId);
     const userName = req.user.username;
     console.log(userName);
 
@@ -22,10 +23,40 @@ export async function getAllConversationController(req, res, next) {
       return res.status(400).json({
         answer: {
           code: 400,
-          message: "No messages found",
+          message: "You don't have any conversation yet",
         },
       });
     }
+
+    //retrieve all users that this user has chatted with
+    const allOtherUsers = [];
+    allMessages.forEach((message) => {
+      if (
+        message.sender.equals(thisUserIdObject) &&
+        !allOtherUsers.includes(message.recipient)
+      ) {
+        allOtherUsers.push(message.recipient);
+      } else if (
+        message.recipient.equals(thisUserIdObject) &&
+        !allOtherUsers.includes(message.sender)
+      ) {
+        allOtherUsers.push(message.sender);
+      }
+    });
+    console.log(allOtherUsers);
+
+    // display all conversation according to the sender and recipient
+    const allConversations = [];
+    allOtherUsers.forEach((user) => {
+      const conversation = [];
+      allMessages.forEach((message) => {
+        if (message.sender.equals(user) || message.recipient.equals(user)) {
+          conversation.push(message);
+        }
+      });
+      allConversations.push(conversation);
+    });
+    console.log(allConversations);
 
     res.status(200).json({
       answer: {
