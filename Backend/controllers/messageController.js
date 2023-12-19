@@ -25,11 +25,6 @@ export async function getAllConversationController(req, res, next) {
       });
     }
 
-    console.log("All messages of this user: ");
-    allMessages.forEach((message) => {
-      console.log(message.message);
-    });
-
     //Retrieve all usersIds that this user has chatted with
     const otherUsersIds = [];
 
@@ -58,7 +53,7 @@ export async function getAllConversationController(req, res, next) {
       const user = await UserModel.findById(userId).select("username");
       otherUsers.push(user);
     }
-    console.log("Other users that thisUser has chatted with: " + otherUsers);
+    //console.log("Other users that thisUser has chatted with: " + otherUsers);
 
     // Create a map to track conversations based on sender and recipient combinations
     const conversationMap = new Map();
@@ -68,7 +63,6 @@ export async function getAllConversationController(req, res, next) {
         ? message.recipient
         : message.sender;
 
-      //const isThisUser = otherUserId.equals(thisUserIdObject); //check if thisUser is part of the conversation and use that to construct the conversation key
       const conversationKey = `${otherUserId}-${thisUserId}`;
       //console.log("Conversation key: " + conversationKey);
 
@@ -80,19 +74,16 @@ export async function getAllConversationController(req, res, next) {
       // Add the message to the corresponding conversation
       conversationMap.get(conversationKey).push(message);
     });
-
     //console.log(conversationMap);
 
-    // Iterate over the conversation map and construct the final list of conversations as an array of objects
+    // Iterate over the conversation map and return the final list of conversations as an array of objects
     const conversations = Array.from(conversationMap.entries()).map(
       ([conversationKey, messages]) => {
         const participantIds = conversationKey.split("-");
         //console.log("ParticipantIds: " + participantIds);
-        //console.log("ThisUserId: " + thisUserId);
         const otherUserId = participantIds.find((id) => id !== thisUserId);
         //console.log("OtherUserId: " + otherUserId);
 
-        // Find the user object based on the otherUserId
         const otherUser = otherUsers.find(
           (user) => user._id.toString() === otherUserId
         );
@@ -102,7 +93,6 @@ export async function getAllConversationController(req, res, next) {
         return { conversationName, messages };
       }
     );
-
     //console.log(conversations);
 
     // Log messages grouped by conversation
@@ -116,13 +106,13 @@ export async function getAllConversationController(req, res, next) {
     res.status(200).json({
       answer: {
         code: 200,
-        message: `All messages of ${userName} retrieved`,
+        message: `All conversations of ${userName} retrieved`,
         data: conversations,
       },
     });
   } catch (error) {
     console.log(error);
-    next(errorCreator(500, "Error retrieving messages"));
+    next(errorCreator(500, "Error retrieving conversations"));
   }
 }
 
