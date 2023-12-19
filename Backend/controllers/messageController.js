@@ -1,23 +1,20 @@
 import mongoose from "mongoose";
 import { MessageModel } from "../models/messageModel.js";
+import { UserModel } from "../models/userModel.js";
 import { errorCreator } from "../lib/errorCreator.js";
 
 export async function getAllConversationController(req, res, next) {
   try {
     // Access user information from req object
     const thisUserId = req.user._id;
-    console.log(thisUserId);
-    const thisUserIdObject = new mongoose.Types.ObjectId(thisUserId);
     const userName = req.user.username;
-    console.log(userName);
+    console.log("This User: " + userName + ", Id:" + thisUserId);
+    const thisUserIdObject = new mongoose.Types.ObjectId(thisUserId);
 
-    // Retrieve all conversations of the user
+    // Retrieve all messages of the user
     const allMessages = await MessageModel.find({
       $or: [{ sender: thisUserId }, { recipient: thisUserId }],
     }).sort({ createdAt: -1 });
-    allMessages.forEach((message) => {
-      console.log(message.message);
-    });
 
     if (!allMessages || allMessages.length === 0) {
       return res.status(400).json({
@@ -28,41 +25,99 @@ export async function getAllConversationController(req, res, next) {
       });
     }
 
-    //retrieve all users that this user has chatted with
-    const allOtherUsers = [];
+    console.log("All messages of this user: ");
     allMessages.forEach((message) => {
+      console.log(message.message);
+    });
+
+    //Retrieve all usersIds that this user has chatted with
+    const otherUsersIds = [];
+
+    allMessages.forEach((message) => {
+      const senderIdString = message.sender.toString();
+      const recipientIdString = message.recipient.toString();
+
       if (
         message.sender.equals(thisUserIdObject) &&
-        !allOtherUsers.includes(message.recipient)
+        !otherUsersIds.includes(recipientIdString)
       ) {
-        allOtherUsers.push(message.recipient);
+        otherUsersIds.push(recipientIdString);
       } else if (
         message.recipient.equals(thisUserIdObject) &&
-        !allOtherUsers.includes(message.sender)
+        !otherUsersIds.includes(senderIdString)
       ) {
-        allOtherUsers.push(message.sender);
+        otherUsersIds.push(senderIdString);
       }
     });
-    console.log(allOtherUsers);
+    //console.log("Other userIds that thisUser has chatted with:  " + otherUsersIds);
 
-    // display all conversation according to the sender and recipient
-    const allConversations = [];
-    allOtherUsers.forEach((user) => {
-      const conversation = [];
-      allMessages.forEach((message) => {
-        if (message.sender.equals(user) || message.recipient.equals(user)) {
-          conversation.push(message);
-        }
-      });
-      allConversations.push(conversation);
+    // Retrieves otherUsers with their username based on the otherUsersIds
+    const otherUsers = [];
+
+    for (const userId of otherUsersIds) {
+      const user = await UserModel.findById(userId).select("username");
+      otherUsers.push(user);
+    }
+    console.log("Other users that thisUser has chatted with: " + otherUsers);
+
+    // Create a map to track conversations based on sender and recipient combinations
+    const conversationMap = new Map();
+
+    allMessages.forEach((message) => {
+      const otherUserId = message.sender.equals(thisUserIdObject)
+        ? message.recipient
+        : message.sender;
+
+      //const isThisUser = otherUserId.equals(thisUserIdObject); //check if thisUser is part of the conversation and use that to construct the conversation key
+      const conversationKey = `${otherUserId}-${thisUserId}`;
+      //console.log("Conversation key: " + conversationKey);
+
+      // If the conversation doesn't exist for this pair, create a new one
+      if (!conversationMap.has(conversationKey)) {
+        conversationMap.set(conversationKey, []);
+      }
+
+      // Add the message to the corresponding conversation
+      conversationMap.get(conversationKey).push(message);
     });
-    console.log(allConversations);
+
+    //console.log(conversationMap);
+
+    // Iterate over the conversation map and construct the final list of conversations as an array of objects
+    const conversations = Array.from(conversationMap.entries()).map(
+      ([conversationKey, messages]) => {
+        const participantIds = conversationKey.split("-");
+        //console.log("ParticipantIds: " + participantIds);
+        //console.log("ThisUserId: " + thisUserId);
+        const otherUserId = participantIds.find((id) => id !== thisUserId);
+        //console.log("OtherUserId: " + otherUserId);
+
+        // Find the user object based on the otherUserId
+        const otherUser = otherUsers.find(
+          (user) => user._id.toString() === otherUserId
+        );
+
+        const conversationName = otherUser ? otherUser.username : "Unknown";
+
+        return { conversationName, messages };
+      }
+    );
+
+    //console.log(conversations);
+
+    // Log messages grouped by conversation
+    conversations.forEach((conversation) => {
+      console.log(`Conversation: ${conversation.conversationName}`);
+      conversation.messages.forEach((message) => {
+        console.log(message.message);
+      });
+    });
 
     res.status(200).json({
       answer: {
         code: 200,
         message: `All messages of ${userName} retrieved`,
-        data: allMessages,
+        data: conversations,
       },
     });
   } catch (error) {
@@ -85,7 +140,8 @@ export async function getAConversationController(req, res, next) {
       return res.status(400).json({
         answer: {
           code: 400,
-          message: "You can't chat with yourself",
+          message:
+            "Sorry, for now you can't chat with yourself 😅 I'll update this feature in the future.",
         },
       });
     }
