@@ -3,7 +3,7 @@ const config = {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 };
 
 export default config;
