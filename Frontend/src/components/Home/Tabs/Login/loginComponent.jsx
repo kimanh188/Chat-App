@@ -24,7 +24,7 @@ export function LoginComponent() {
       />
       <button
         type="submit"
-        className="bg-blue-500 text-white block w-full p-2 rounded-md"
+        className="bg-blue-500 text-white block w-full p-2 rounded-md font-bold hover:text-blue-500 hover:bg-blue-200"
       >
         Login
       </button>
