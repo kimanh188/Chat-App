@@ -21,7 +21,7 @@ await mongoConnect();
 const app = express();
 app.use(json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({ credentials: true }));
 
 app.use("/user", userRouter);
 app.use("/user/profile", profileRouter);

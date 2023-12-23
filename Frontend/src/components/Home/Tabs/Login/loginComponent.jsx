@@ -3,7 +3,8 @@ import { useState } from "react";
 export function LoginComponent() {
   const [showPassword, setShowPassword] = useState(false);
 
-  const onClickHandler = () => {
+  const showHidePasswordHandler = (event) => {
+    event.preventDefault();
     setShowPassword(!showPassword);
   };
 
@@ -17,7 +18,7 @@ export function LoginComponent() {
         id="login-email"
         name="email"
         placeholder="Your email"
-        className="block w-full p-2 mb-2 rounded-sm input-bordered input-info"
+        className="block w-full p-2 mb-2 rounded-sm input-bordered input-info bg-gray-50 focus:bg-white"
       />
 
       <label htmlFor="password" className="block mb-2 pl-2 font-bold">
@@ -34,7 +35,7 @@ export function LoginComponent() {
         />
         <button
           className="absolute inset-y-0 right-3 flex items-center pr-2 cursor-pointer"
-          onClick={onClickHandler}
+          onClick={showHidePasswordHandler}
         >
           <img
             src={

@@ -21,7 +21,8 @@ export function RegisterComponent() {
     setPassword(event.target.value);
   };
 
-  const onClickHandler = () => {
+  const showHidePasswordHandler = (event) => {
+    event.preventDefault();
     setShowPassword(!showPassword);
   };
 
@@ -33,21 +34,28 @@ export function RegisterComponent() {
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post(
+      const requestData = {
+        email: email,
+        username: username,
+        password: password,
+      };
+
+      // Add profileImg to requestData if it's not null
+      if (profileImg !== null) {
+        requestData.profileImg = profileImg;
+      }
+
+      const response = await axios.post(
         "http://localhost:3022/user/register",
-        {
-          email: email,
-          username: username,
-          password: password,
-          profileImg: profileImg,
-        },
+        requestData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
         }
       );
-      console.log("Response axios: ", data);
+
+      console.log("Response fetch: ", response);
     } catch (error) {
       console.log("Error during registration: " + error);
     }
@@ -105,7 +113,7 @@ export function RegisterComponent() {
         />
         <button
           className="absolute inset-y-0 right-3 flex items-center pr-2 cursor-pointer"
-          onClick={onClickHandler}
+          onClick={showHidePasswordHandler}
         >
           <img
             src={
