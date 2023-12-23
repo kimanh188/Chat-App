@@ -8,7 +8,7 @@ export function LoginComponent() {
   };
 
   return (
-    <form action="" className="w-full">
+    <form action="" method="get" id="loginForm" className="w-full">
       <label htmlFor="email" className="block mb-2 pl-2 font-bold">
         Email *:
       </label>
