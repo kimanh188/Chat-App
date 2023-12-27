@@ -24,8 +24,9 @@ export function RegisterComponent() {
     setShowPassword(!showPassword);
   };
 
-  const submitHandler = async (event) => {
+  const registerHandler = async (event) => {
     event.preventDefault();
+
     try {
       const requestData = {
         email: email,
@@ -55,6 +56,7 @@ export function RegisterComponent() {
       method="POST"
       id="registerForm"
       className=" w-full"
+      onSubmit={registerHandler}
     >
       <label
         htmlFor="email"
@@ -123,8 +125,8 @@ export function RegisterComponent() {
       </div>
 
       <button
+        type="submit"
         className="bg-blue-500 text-white block w-full p-2 rounded-md font-bold hover:text-blue-500 hover:bg-blue-200"
-        onClick={submitHandler}
       >
         Register
       </button>

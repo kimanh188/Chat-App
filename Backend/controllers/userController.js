@@ -28,7 +28,7 @@ export async function registerPostController(req, res, next) {
   }
 }
 
-export async function loginGetController(req, res, next) {
+export async function loginPostController(req, res, next) {
   const { email, password } = req.body;
 
   try {

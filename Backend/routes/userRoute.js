@@ -1,7 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
 import {
-  loginGetController,
+  loginPostController,
   logoutPostController,
   registerPostController,
 } from "../controllers/userController.js";
@@ -36,12 +36,12 @@ userRouter.post(
   registerPostController
 );
 
-userRouter.get(
+userRouter.post(
   "/login",
   emailValidation,
   validation,
   jwtCreator,
-  loginGetController
+  loginPostController
 );
 
 userRouter.post("/logout", logoutPostController);
