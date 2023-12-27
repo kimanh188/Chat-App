@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Homepage } from "./routes/Home/homeContainer.jsx";
+import { ChatPage } from "./routes/Chat/chatContainer.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -15,6 +16,9 @@ const router = createBrowserRouter(
         <Route path={"/login"} element={<Homepage />} />
         <Route path={"/register"} element={<Homepage />} />
       </Route>
+      <Route path={"/chat"} element={<ChatPage />} />
+      <Route path={"/profile"} element={"Users Profile"} />
+      <Route path={"*"} element={"404 Not Found"} />
     </>
   )
 );
