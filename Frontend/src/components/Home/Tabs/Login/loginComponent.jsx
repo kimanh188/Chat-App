@@ -10,7 +10,10 @@ export function LoginComponent() {
 
   return (
     <form action="" method="get" id="loginForm" className="w-full">
-      <label htmlFor="email" className="block mb-2 pl-2 font-bold">
+      <label
+        htmlFor="email"
+        className="block mb-2 pl-2 font-bold text-gray-600"
+      >
         Email *:
       </label>
       <input
@@ -18,10 +21,13 @@ export function LoginComponent() {
         id="login-email"
         name="email"
         placeholder="Your email"
-        className="block w-full p-2 mb-2 rounded-sm input-bordered input-info bg-gray-50 focus:bg-white"
+        className="block w-full p-2 mb-2 rounded-sm  bg-gray-50 focus:bg-white text-gray-600"
       />
 
-      <label htmlFor="password" className="block mb-2 pl-2 font-bold">
+      <label
+        htmlFor="password"
+        className="block mb-2 pl-2 font-bold text-gray-600"
+      >
         Password *:
       </label>
       <div className="relative">
@@ -29,9 +35,9 @@ export function LoginComponent() {
           type={showPassword ? "text" : "password"}
           id="login-password"
           name="password"
-          placeholder="Secure your account with 8+ chars, 1 UPPERCASE"
+          placeholder="Your password"
           required={true}
-          className="block w-full p-2 mb-2 rounded-sm input-bordered input-info bg-gray-50 focus:bg-white"
+          className="block w-full p-2 mb-2 rounded-sm bg-gray-50 focus:bg-white text-gray-600"
         />
         <button
           className="absolute inset-y-0 right-3 flex items-center pr-2 cursor-pointer"

@@ -2,15 +2,13 @@ import { UserModel } from "../models/userModel.js";
 import { errorCreator } from "../lib/errorCreator.js";
 
 export async function registerPostController(req, res, next) {
-  const { email, username, password, profileImg } = req.body;
-  /*  const profileImg = req.file ? req.file.filename : null; */
+  const { email, username, password } = req.body;
 
   try {
     const newUser = await UserModel.create({
       email: email,
       username: username,
       password: password,
-      profileImg: profileImg || "",
     });
 
     const newUserObject = newUser.toObject();
