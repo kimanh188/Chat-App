@@ -21,7 +21,7 @@ export function LoginComponent() {
         id="login-email"
         name="email"
         placeholder="Your email"
-        className="block w-full p-2 mb-2 rounded-sm  bg-gray-50 focus:bg-white text-gray-600"
+        className="block w-full p-2 mb-2 rounded-sm bg-gray-50 focus:bg-white text-gray-600"
       />
 
       <label
