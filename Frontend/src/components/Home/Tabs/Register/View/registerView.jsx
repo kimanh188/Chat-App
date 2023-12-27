@@ -1,17 +1,18 @@
-export function LoginView({
-  loginHandler,
+export function RegisterView({
+  registerHandler,
   emailInputHandler,
+  usernameInputHandler,
   passwordInputHandler,
-  showHidePasswordHandler,
   showPassword,
+  showHidePasswordHandler,
 }) {
   return (
     <form
-      action="http://localhost:3022/user/login"
+      action="http://localhost:3022/user/register"
       method="POST"
-      id="loginForm"
-      className="w-full"
-      onSubmit={loginHandler}
+      id="registerForm"
+      className=" w-full"
+      onSubmit={registerHandler}
     >
       <label
         htmlFor="email"
@@ -21,12 +22,28 @@ export function LoginView({
       </label>
       <input
         type="email"
-        id="login-email"
+        id="email"
         name="email"
-        placeholder="Your email"
-        className="block w-full p-2 mb-2 rounded-sm bg-gray-50 focus:bg-white text-gray-600"
+        placeholder="yourMagicMail@example.com"
         required={true}
         onChange={emailInputHandler}
+        className="block w-full p-2 mb-2 rounded-sm  bg-gray-50 focus:bg-white text-gray-600"
+      />
+
+      <label
+        htmlFor="username"
+        className="block mb-2 pl-2 font-bold text-gray-600"
+      >
+        Username *:
+      </label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        placeholder="ChattingWizard"
+        required={true}
+        onChange={usernameInputHandler}
+        className="block w-full p-2 mb-2 rounded-sm  bg-gray-50 focus:bg-white text-gray-600"
       />
 
       <label
@@ -38,12 +55,12 @@ export function LoginView({
       <div className="relative">
         <input
           type={showPassword ? "text" : "password"}
-          id="login-password"
+          id="password"
           name="password"
-          placeholder="Your password"
+          placeholder="Secure your account with 8+ chars, 1 UPPERCASE"
           required={true}
-          className="block w-full p-2 mb-2 rounded-sm bg-gray-50 focus:bg-white text-gray-600"
           onChange={passwordInputHandler}
+          className="block w-full p-2 mb-2 rounded-sm  bg-gray-50 focus:bg-white text-gray-600"
         />
         <button
           className="absolute inset-y-0 right-3 flex items-center pr-2 cursor-pointer"
@@ -64,7 +81,7 @@ export function LoginView({
         type="submit"
         className="bg-blue-500 text-white block w-full p-2 rounded-md font-bold hover:text-blue-500 hover:bg-blue-200"
       >
-        Login
+        Register
       </button>
     </form>
   );
