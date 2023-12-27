@@ -5,15 +5,15 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { HomepageComponent } from "./components/Home/homepageComponent";
+import { Homepage } from "./routes/Home/homeContainer.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path={"/"}>
-        <Route index element={<HomepageComponent />} />
-        <Route path={"/login"} element={<HomepageComponent />} />
-        <Route path={"/register"} element={<HomepageComponent />} />
+        <Route index element={<Homepage />} />
+        <Route path={"/login"} element={<Homepage />} />
+        <Route path={"/register"} element={<Homepage />} />
       </Route>
     </>
   )
