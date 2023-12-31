@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { RegisterView } from "./View/registerView.jsx";
+import { UserContext } from "../../../contexts/userContext.jsx";
 
 export function RegisterComponent() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const { setLoggedInEmail } = useContext(UserContext);
 
   const emailInputHandler = (event) => {
     setEmail(event.target.value);
@@ -45,7 +48,8 @@ export function RegisterComponent() {
         }
       );
 
-      console.log("Response fetch: ", response);
+      console.log("Response: ", response.data.answer);
+      setLoggedInEmail(response.data.answer.data.email);
     } catch (error) {
       console.log("Error during registration: " + error);
     }
