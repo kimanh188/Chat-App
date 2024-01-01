@@ -12,6 +12,7 @@ export function Homepage() {
       console.log("User is logged in: " + loggedInEmail);
       navigate("/chat");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedInEmail]);
 
   return (
