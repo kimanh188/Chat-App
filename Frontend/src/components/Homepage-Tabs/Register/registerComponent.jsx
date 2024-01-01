@@ -9,7 +9,7 @@ export function RegisterComponent() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { setLoggedInEmail } = useContext(UserContext);
+  const { setLoggedInEmail, setLoggedInId } = useContext(UserContext);
 
   const emailInputHandler = (event) => {
     setEmail(event.target.value);
@@ -50,6 +50,7 @@ export function RegisterComponent() {
 
       console.log("Response: ", response.data.answer);
       setLoggedInEmail(response.data.answer.data.email);
+      setLoggedInId(response.data.answer.data._id);
     } catch (error) {
       console.log("Error during registration: " + error);
     }

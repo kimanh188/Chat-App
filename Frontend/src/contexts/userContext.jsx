@@ -5,12 +5,15 @@ export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
   const [loggedInEmail, setLoggedInEmail] = useState(null);
+  const [loggedInId, setLoggedInId] = useState(null);
 
   useEffect(() => {
     try {
-      axios.get("http://localhost:3022/user/profile").then((response) => {
+      axios.post("http://localhost:3022/user/login").then((response) => {
         console.log("Response: ", response);
+        console.log("id: " + response.data._id);
         setLoggedInEmail(response.data.email);
+        setLoggedInId(response.data._id);
       });
     } catch (error) {
       console.log("Error during login: " + error);
@@ -18,7 +21,9 @@ export const UserContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ loggedInEmail, setLoggedInEmail }}>
+    <UserContext.Provider
+      value={{ loggedInEmail, setLoggedInEmail, loggedInId, setLoggedInId }}
+    >
       {children}
     </UserContext.Provider>
   );

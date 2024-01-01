@@ -7,7 +7,7 @@ export function LoginComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { setLoggedInEmail } = useContext(UserContext);
+  const { setLoggedInEmail, setLoggedInId } = useContext(UserContext);
 
   const emailInputHandler = (event) => {
     setEmail(event.target.value);
@@ -44,6 +44,7 @@ export function LoginComponent() {
       );
       console.log("Response: ", response.data.answer);
       setLoggedInEmail(response.data.answer.data.email);
+      setLoggedInId(response.data.answer.data._id);
     } catch (error) {
       console.log("Error during login: " + error);
     }
