@@ -4,13 +4,19 @@ import { TablistComponent } from "../../components/Homepage-Tabs/tablistComponen
 import { UserContext } from "../../contexts/userContext.jsx";
 
 export function Homepage() {
-  const { loggedInEmail, loggedInId } = useContext(UserContext);
+  const { loggedInEmail, loggedInId, loggedInUsername } =
+    useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (loggedInEmail) {
       console.log(
-        "User is logged in: " + loggedInEmail + ", id: " + loggedInId
+        "User is logged in: " +
+          loggedInUsername +
+          ", " +
+          loggedInEmail +
+          ", id: " +
+          loggedInId
       );
       navigate("/chat");
     }
