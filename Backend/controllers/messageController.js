@@ -3,7 +3,7 @@ import { MessageModel } from "../models/messageModel.js";
 import { UserModel } from "../models/userModel.js";
 import { errorCreator } from "../lib/errorCreator.js";
 
-export async function getAllConversationController(req, res, next) {
+export async function getAllConversationsController(req, res, next) {
   try {
     // Access user information from req object
     const thisUserId = req.user._id;
