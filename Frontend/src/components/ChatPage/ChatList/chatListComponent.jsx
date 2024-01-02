@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router";
 import { UserContext } from "../../../contexts/userContext.jsx";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -13,6 +14,8 @@ export function ChatListComponent() {
 
   const [token, setToken] = useState("");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const retrieveToken = () => {
       try {
@@ -25,7 +28,7 @@ export function ChatListComponent() {
     };
     retrieveToken();
 
-    const getConversations = async () => {
+    /*    const getConversations = async () => {
       try {
         const response = await axios.get("http://localhost:3022/chat", {
           headers: {
@@ -37,26 +40,25 @@ export function ChatListComponent() {
         console.log("Error fetching conversations: ", error);
       }
     };
-    getConversations();
+    getConversations(); */
   }, []);
 
   return (
-    <div className="w-1/3 h-screen bg-yellow-200 pl-5">
-      <div className="flex justify-between items-center py-5 ">
+    <div className="w-1/3 h-screen bg-yellow-100 pl-5 text-gray-900">
+      <div className="flex justify-between items-center pt-5 ">
         <h1 className="text-2xl inline-block w-2/3">
-          Welcome {loggedInUsername}
+          Welcome {loggedInUsername}!
         </h1>
         <div className="flex items-center inline-block w-1/3">
           <img
             src={profileImgPath}
             alt="User Avatar"
-            className="bg-blue-200 rounded-full p-1 w-16 h-16 "
+            className="bg-blue-200 rounded-full p-1 w-16 h-16 object-cover"
           />
         </div>
       </div>
-
       <div>
-        <h2 className="">All conversations with the latest message here</h2>
+        <h2 className="pt-5">All conversations with the latest message here</h2>
         <div></div>
       </div>
     </div>
