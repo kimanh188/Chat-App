@@ -2,6 +2,7 @@ import express, { json } from "express";
 import { config } from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
 import {
   mongoConnect,
   mongoConnectListener,
@@ -26,6 +27,8 @@ app.use(cors({ credentials: true }));
 app.use("/user", userRouter);
 app.use("/user/profile", profileRouter);
 app.use("/chat", messageRouter);
+
+app.use("/uploads", express.static("uploads"));
 
 app.all("*", (req, res, next) => {
   res.status(404).json({

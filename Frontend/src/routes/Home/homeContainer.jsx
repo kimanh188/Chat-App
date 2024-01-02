@@ -4,7 +4,7 @@ import { TablistComponent } from "../../components/Homepage-Tabs/tablistComponen
 import { UserContext } from "../../contexts/userContext.jsx";
 
 export function Homepage() {
-  const { loggedInEmail, loggedInId, loggedInUsername } =
+  const { loggedInEmail, loggedInId, loggedInUsername, loggedInProfileImg } =
     useContext(UserContext);
   const navigate = useNavigate();
 
@@ -16,7 +16,9 @@ export function Homepage() {
           ", " +
           loggedInEmail +
           ", id: " +
-          loggedInId
+          loggedInId +
+          ", profileImg: " +
+          loggedInProfileImg
       );
       navigate("/chat");
     }

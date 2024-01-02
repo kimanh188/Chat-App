@@ -6,6 +6,7 @@ export const UserContextProvider = ({ children }) => {
   const [loggedInEmail, setLoggedInEmail] = useState(null);
   const [loggedInUsername, setLoggedInUsername] = useState(null);
   const [loggedInId, setLoggedInId] = useState(null);
+  const [loggedInProfileImg, setLoggedInProfileImg] = useState(null);
 
   return (
     <UserContext.Provider
@@ -16,6 +17,8 @@ export const UserContextProvider = ({ children }) => {
         setLoggedInUsername,
         loggedInId,
         setLoggedInId,
+        loggedInProfileImg,
+        setLoggedInProfileImg,
       }}
     >
       {children}
