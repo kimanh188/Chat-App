@@ -2,7 +2,6 @@ import express, { json } from "express";
 import { config } from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import path from "path";
 import {
   mongoConnect,
   mongoConnectListener,
