@@ -96,12 +96,12 @@ export async function getAllConversationsController(req, res, next) {
     //console.log(conversations);
 
     // Log messages grouped by conversation
-    conversations.forEach((conversation) => {
+    /*  conversations.forEach((conversation) => {
       console.log(`Conversation: ${conversation.conversationName}`);
       conversation.messages.forEach((message) => {
         console.log(message.message);
       });
-    });
+    }); */
 
     res.status(200).json({
       answer: {

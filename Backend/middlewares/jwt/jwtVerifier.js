@@ -6,7 +6,7 @@ export const jwtVerifier = async (req, res, next) => {
   const token = req.cookies.jwt;
 
   if (!token) {
-    throw new Error("Token not provided");
+    next(errorCreator(401, "Token not provided"));
   }
 
   try {
