@@ -1,5 +1,4 @@
 import { Router } from "express";
-import multer from "multer";
 import {
   loginPostController,
   logoutPostController,
@@ -13,18 +12,6 @@ import { jwtCreator } from "../middlewares/jwt/jwtCreator.js";
 
 export const userRouter = Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads/profileImgs");
-  },
-  filename: function (req, file, cb) {
-    const username = req.user.username;
-    cb(null, username + "_" + file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage });
-
 userRouter.post(
   "/register",
   emailValidation,
@@ -32,7 +19,6 @@ userRouter.post(
   passwordValidation,
   validation,
   jwtCreator,
-  upload.single("profileImg"),
   registerPostController
 );
 
