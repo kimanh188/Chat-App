@@ -5,6 +5,7 @@ export function RegisterView({
   passwordInputHandler,
   showPassword,
   showHidePasswordHandler,
+  errors,
 }) {
   return (
     <form
@@ -76,6 +77,16 @@ export function RegisterView({
           />
         </button>
       </div>
+
+      {errors && (
+        <p className="text-red-600 text-md m-2 text-center">
+          {errors.map((error, index) => (
+            <span key={index}>
+              {error} <br />
+            </span>
+          ))}
+        </p>
+      )}
 
       <button
         type="submit"

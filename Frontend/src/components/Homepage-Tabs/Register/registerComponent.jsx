@@ -8,6 +8,7 @@ export function RegisterComponent() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   const {
     setLoggedInEmail,
@@ -35,7 +36,7 @@ export function RegisterComponent() {
 
   const registerHandler = async (event) => {
     event.preventDefault();
-
+    setErrors([]);
     try {
       const requestData = {
         email: email,
@@ -54,12 +55,28 @@ export function RegisterComponent() {
         }
       );
 
-      console.log("Response: ", response.data.answer);
-      setLoggedInEmail(response.data.answer.data.email);
-      setLoggedInUsername(response.data.answer.data.username);
-      setLoggedInId(response.data.answer.data._id);
-      setLoggedInProfileImg(response.data.answer.data.profileImg);
+      if (response.status === 200) {
+        console.log("Response: ", response.data.answer);
+        setLoggedInEmail(response.data.answer.data.email);
+        setLoggedInUsername(response.data.answer.data.username);
+        setLoggedInId(response.data.answer.data._id);
+        setLoggedInProfileImg(response.data.answer.data.profileImg);
+      }
     } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.log("Error response:", error.response);
+
+        const { status, data } = error.response;
+
+        if (status === 400) {
+          data.answer.errors.forEach((error) => {
+            console.log("Error message: ", error.msg);
+            setErrors((prevErrors) => [...prevErrors, error.msg]);
+          });
+          return;
+        }
+      }
+
       console.log("Error during registration: " + error);
     }
   };
@@ -71,5 +88,6 @@ export function RegisterComponent() {
     passwordInputHandler,
     showPassword,
     showHidePasswordHandler,
+    errors,
   });
 }
