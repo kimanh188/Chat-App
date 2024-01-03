@@ -4,6 +4,7 @@ export function LoginView({
   passwordInputHandler,
   showHidePasswordHandler,
   showPassword,
+  error,
 }) {
   return (
     <form
@@ -35,6 +36,7 @@ export function LoginView({
       >
         Password *:
       </label>
+
       <div className="relative">
         <input
           type={showPassword ? "text" : "password"}
@@ -59,6 +61,8 @@ export function LoginView({
           />
         </button>
       </div>
+
+      {error && <p className="text-red-600 text-md m-2 text-center">{error}</p>}
 
       <button
         type="submit"

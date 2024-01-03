@@ -17,7 +17,7 @@ export const jwtCreator = (req, res, next) => {
     maxAge: 3600000, // Validity period of the cookie (same time as expiry of the JWT token)
   });
 
-  console.log(token);
+  //console.log(token);
 
   next();
 };

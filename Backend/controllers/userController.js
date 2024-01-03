@@ -47,7 +47,7 @@ export async function loginPostController(req, res, next) {
       return res.status(401).json({
         answer: {
           code: 401,
-          message: "Login details incorrect",
+          message: "Your email or password is incorrect",
         },
       });
     } else {

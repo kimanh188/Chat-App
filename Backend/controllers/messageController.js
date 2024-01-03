@@ -8,7 +8,7 @@ export async function getAllConversationsController(req, res, next) {
     // Access user information from req object
     const thisUserId = req.user._id;
     const userName = req.user.username;
-    console.log("This User: " + userName + ", Id:" + thisUserId);
+    //console.log("This User: " + userName + ", Id:" + thisUserId);
     const thisUserIdObject = new mongoose.Types.ObjectId(thisUserId);
 
     // Retrieve all messages of the user

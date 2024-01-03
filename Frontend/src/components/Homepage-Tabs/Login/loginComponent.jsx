@@ -7,6 +7,7 @@ export function LoginComponent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const {
     setLoggedInEmail,
     setLoggedInId,
@@ -48,13 +49,28 @@ export function LoginComponent() {
           withCredentials: true,
         }
       );
-      console.log("Response: ", response.data.answer);
-      setLoggedInEmail(response.data.answer.data.email);
-      setLoggedInUsername(response.data.answer.data.username);
-      setLoggedInId(response.data.answer.data._id);
-      setLoggedInProfileImg(response.data.answer.data.profileImg);
+
+      if (response.status === 200) {
+        console.log("Response answer: ", response.data.answer);
+        setLoggedInEmail(response.data.answer.data.email);
+        setLoggedInUsername(response.data.answer.data.username);
+        setLoggedInId(response.data.answer.data._id);
+        setLoggedInProfileImg(response.data.answer.data.profileImg);
+      }
     } catch (error) {
-      console.log("Error during login: " + error);
+      // Handle axios errors to display error message
+      if (axios.isAxiosError(error) && error.response) {
+        console.log("Error response:", error.response);
+        const { status, data } = error.response;
+        if (status === 401) {
+          console.log("Error message:", data.answer.message);
+          setError(data.answer.message);
+          return;
+        }
+      }
+
+      //"catch" other errors
+      console.error("Error during login:", error.message);
     }
   };
 
@@ -64,5 +80,6 @@ export function LoginComponent() {
     passwordInputHandler,
     showHidePasswordHandler,
     showPassword,
+    error,
   });
 }
