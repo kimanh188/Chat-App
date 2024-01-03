@@ -21,13 +21,12 @@ export function ChatListComponent() {
     const retrieveToken = () => {
       try {
         const storedToken = Cookies.get("jwt");
-        console.log("Stored token: ", storedToken);
+        console.log("1. Stored token: ", storedToken);
         setToken(storedToken);
       } catch (error) {
         console.log("Error retrieving token: ", error);
       }
     };
-    retrieveToken();
 
     const getConversations = async () => {
       try {
@@ -38,11 +37,17 @@ export function ChatListComponent() {
           },
           withCredentials: true,
         });
-        console.log("Response getConversations: ", response.data.answer.data);
+        console.log(
+          "2. Response getConversations: ",
+          response.data.answer.data
+        );
+        setConversations(response.data.answer.data);
+        console.log("3. Conversations array: " + conversations);
       } catch (error) {
         console.log("Error fetching conversations: ", error);
       }
     };
+    retrieveToken();
     getConversations();
   }, []);
 
@@ -62,7 +67,14 @@ export function ChatListComponent() {
       </div>
       <div>
         <h2 className="pt-5">All conversations with the latest message here</h2>
-        <div></div>
+        <div>
+          {conversations.map((conversation, index) => (
+            <div key={index}>
+              <h3>{conversation.conversationName}</h3>
+              <p>{conversation.messages[0].message}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
