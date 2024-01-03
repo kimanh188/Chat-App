@@ -21,7 +21,12 @@ await mongoConnect();
 const app = express();
 app.use(json());
 app.use(cookieParser());
-app.use(cors({ credentials: true }));
+app.use(
+  cors({
+    origin: "http://localhost:3021",
+    credentials: true,
+  })
+);
 
 app.use("/user", userRouter);
 app.use("/user/profile", profileRouter);
