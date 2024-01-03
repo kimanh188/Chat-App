@@ -62,7 +62,7 @@ export function LoginView({
         </button>
       </div>
 
-      {error && <p className="text-red-600 text-md m-2 text-center">{error}</p>}
+      {error && <p className="text-red-600 text-md m-4 text-center">{error}</p>}
 
       <button
         type="submit"

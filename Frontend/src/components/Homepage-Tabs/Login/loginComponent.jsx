@@ -65,7 +65,8 @@ export function LoginComponent() {
         if (status === 401) {
           console.log("Error message:", data.answer.message);
           setError(data.answer.message);
-          return;
+        } else if (status === 400) {
+          setError(data.answer.errors[0].msg);
         }
       }
 

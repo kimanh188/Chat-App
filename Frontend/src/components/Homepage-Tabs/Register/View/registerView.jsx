@@ -79,13 +79,13 @@ export function RegisterView({
       </div>
 
       {errors && (
-        <p className="text-red-600 text-md m-2 text-center">
+        <div className="text-red-600 text-md m-4 text-center">
           {errors.map((error, index) => (
             <span key={index}>
               {error} <br />
             </span>
           ))}
-        </p>
+        </div>
       )}
 
       <button
