@@ -42,7 +42,6 @@ export function ChatListComponent() {
           response.data.answer.data
         );
         setConversations(response.data.answer.data);
-        console.log("3. Conversations array: " + conversations);
       } catch (error) {
         console.log("Error fetching conversations: ", error);
       }
@@ -50,6 +49,15 @@ export function ChatListComponent() {
     retrieveToken();
     getConversations();
   }, []);
+
+  /*   const chooseAConversationHandler = async () => {
+    //
+    try {
+      const response = await axios.get(`http://localhost:3022/chat/${}`)
+    } catch (error) {
+      console.log("Error fetching a conversation: ", error);
+    }
+  }; */
 
   return (
     <div className="w-1/3 h-screen bg-yellow-100 px-5 text-gray-900">
@@ -70,14 +78,18 @@ export function ChatListComponent() {
         <h2 className="py-5">All conversations with the latest message here</h2>
         <div>
           {conversations.map((conversation, index) => (
-            <div key={index} className="py-2 mb-4 bg-blue-300">
+            <button
+              key={index}
+              className="p-2 mb-4 bg-blue-300 rounded-md hover:bg-gray-100 text-left border w-full"
+              /* onClick={chooseAConversationHandler} */
+            >
               <h3 className="font-bold">{conversation.conversationName}</h3>
               <div>
                 {conversation.messages.map((mes, index) => (
                   <p key={index}>{mes.message}</p>
                 ))}
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>
