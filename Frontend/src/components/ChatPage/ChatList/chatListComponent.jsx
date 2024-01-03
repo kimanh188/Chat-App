@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { UserContext } from "../../../contexts/userContext.jsx";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { SearchComponent } from "../SearchBar/searchComponent.jsx";
 
 export function ChatListComponent() {
   const { loggedInUsername, loggedInProfileImg } = useContext(UserContext);
@@ -60,39 +61,44 @@ export function ChatListComponent() {
   }; */
 
   return (
-    <div className="w-1/3 h-screen bg-yellow-100 px-5 text-gray-900">
-      <div className="flex justify-between items-center pt-5 ">
-        <h1 className="text-2xl inline-block w-2/3">
-          Welcome {loggedInUsername}!
-        </h1>
-        <div className="flex items-center inline-block ">
-          <img
-            src={profileImgPath}
-            alt="User Avatar"
-            className="bg-blue-200 rounded-full p-1 w-16 h-16 object-cover"
-          />
+    <>
+      <div className="w-1/3 h-screen bg-yellow-100 px-5 text-gray-900">
+        <SearchComponent />
+        <div className="flex justify-between items-center pt-5 ">
+          <h1 className="text-2xl inline-block w-2/3">
+            Welcome {loggedInUsername}!
+          </h1>
+          <div className="flex items-center inline-block ">
+            <img
+              src={profileImgPath}
+              alt="User Avatar"
+              className="bg-blue-200 rounded-full p-1 w-16 h-16 object-cover"
+            />
+          </div>
         </div>
-      </div>
 
-      <div>
-        <h2 className="py-5">All conversations with the latest message here</h2>
         <div>
-          {conversations.map((conversation, index) => (
-            <button
-              key={index}
-              className="p-2 mb-4 bg-blue-300 rounded-md hover:bg-gray-100 text-left border w-full"
-              /* onClick={chooseAConversationHandler} */
-            >
-              <h3 className="font-bold">{conversation.conversationName}</h3>
-              <div>
-                {conversation.messages.map((mes, index) => (
-                  <p key={index}>{mes.message}</p>
-                ))}
-              </div>
-            </button>
-          ))}
+          <h2 className="py-5">
+            All conversations with the latest message here
+          </h2>
+          <div>
+            {conversations.map((conversation, index) => (
+              <button
+                key={index}
+                className="p-2 mb-4 bg-blue-300 rounded-md hover:bg-gray-100 text-left border w-full"
+                /* onClick={chooseAConversationHandler} */
+              >
+                <h3 className="font-bold">{conversation.conversationName}</h3>
+                <div>
+                  {conversation.messages.map((mes, index) => (
+                    <p key={index}>{mes.message}</p>
+                  ))}
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
