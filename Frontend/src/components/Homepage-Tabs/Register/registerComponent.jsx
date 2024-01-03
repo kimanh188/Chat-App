@@ -50,6 +50,7 @@ export function RegisterComponent() {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true,
         }
       );
 

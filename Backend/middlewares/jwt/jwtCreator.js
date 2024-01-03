@@ -12,9 +12,9 @@ export const jwtCreator = (req, res, next) => {
 
   res.cookie("jwt", token, {
     httpOnly: true,
-    /* secure: true, //only via HTTPS (set to false for localhost)
-    sameSite: "Strict", // Protection against CSRF
-    maxAge: 1800000, // Validity period of the cookie (same time as expiry of the JWT token) */
+    secure: false, //secure: true, //only via HTTPS (set to false for localhost)
+    sameSite: "None",
+    maxAge: 3600000, // Validity period of the cookie (same time as expiry of the JWT token)
   });
 
   console.log(token);
