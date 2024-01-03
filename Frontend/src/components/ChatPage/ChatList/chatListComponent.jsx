@@ -4,14 +4,10 @@ import { UserContext } from "../../../contexts/userContext.jsx";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { SearchComponent } from "../SearchBar/searchComponent.jsx";
+import { UserProfileComponent } from "../../UserProfile/userProfileComponent.jsx";
 
 export function ChatListComponent() {
-  const { loggedInUsername, loggedInProfileImg } = useContext(UserContext);
-
-  const profileImgPath = loggedInProfileImg
-    ? `http://localhost:3022/${loggedInProfileImg}`
-    : "src/assets/default-user-avatar.svg";
-  //console.log("Profile Image Path:", profileImgPath);
+  const { loggedInUsername } = useContext(UserContext);
 
   const [token, setToken] = useState("");
   const [conversations, setConversations] = useState([]);
@@ -68,13 +64,8 @@ export function ChatListComponent() {
           <h1 className="text-2xl inline-block w-2/3">
             Welcome {loggedInUsername}!
           </h1>
-          <div className="flex items-center inline-block ">
-            <img
-              src={profileImgPath}
-              alt="User Avatar"
-              className="bg-blue-200 rounded-full p-1 w-16 h-16 object-cover"
-            />
-          </div>
+
+          <UserProfileComponent />
         </div>
 
         <div>
