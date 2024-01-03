@@ -13,6 +13,7 @@ export function ChatListComponent() {
   //console.log("Profile Image Path:", profileImgPath);
 
   const [token, setToken] = useState("");
+  const [conversations, setConversations] = useState([]);
 
   const navigate = useNavigate();
 
@@ -28,19 +29,21 @@ export function ChatListComponent() {
     };
     retrieveToken();
 
-    /*    const getConversations = async () => {
+    const getConversations = async () => {
       try {
+        //console.log("token: " + token);
         const response = await axios.get("http://localhost:3022/chat", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          withCredentials: true,
         });
-        console.log("Response getConversations: ", response.data);
+        console.log("Response getConversations: ", response.data.answer.data);
       } catch (error) {
         console.log("Error fetching conversations: ", error);
       }
     };
-    getConversations(); */
+    getConversations();
   }, []);
 
   return (

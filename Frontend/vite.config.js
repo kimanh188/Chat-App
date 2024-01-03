@@ -5,7 +5,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3021,
+    port: 3023,
   },
   optimizeDeps: {
     exclude: ["js-big-decimal"],

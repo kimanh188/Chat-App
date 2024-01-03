@@ -11,8 +11,8 @@ export const jwtCreator = (req, res, next) => {
   const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
 
   res.cookie("jwt", token, {
-    httpOnly: true,
-    secure: false, //secure: true, //only via HTTPS (set to false for localhost)
+    httpOnly: false,
+    secure: true, //secure: true, //only via HTTPS (set to false for localhost)
     sameSite: "None",
     maxAge: 3600000, // Validity period of the cookie (same time as expiry of the JWT token)
   });
