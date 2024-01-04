@@ -1,28 +1,33 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 
-const userSchema = new Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
+const userSchema = new Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
 
-  username: {
-    type: String,
-    unique: true,
-    trim: true,
-  },
+    username: {
+      type: String,
+      unique: true,
+      trim: true,
+    },
 
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-  },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-  profileImg: String,
-});
+    profileImg: String,
+  },
+  {
+    timestamps: true,
+  }
+);
 
 // Hash password before saving to database
 userSchema.pre("save", async function (next) {
