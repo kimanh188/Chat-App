@@ -11,10 +11,6 @@ const messageSchema = new Schema(
       ref: "user",
     },
     message: String,
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
   },
   {
     timestamps: true,

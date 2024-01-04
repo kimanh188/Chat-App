@@ -14,7 +14,7 @@ export async function getAllConversationsController(req, res, next) {
     // Retrieve all messages of the user
     const allMessages = await MessageModel.find({
       $or: [{ sender: thisUserId }, { recipient: thisUserId }],
-    }).sort({ createdAt: 1 });
+    }).sort({ createdAt: -1 });
 
     if (!allMessages || allMessages.length === 0) {
       return res.status(400).json({
@@ -99,10 +99,6 @@ export async function getAllConversationsController(req, res, next) {
       }
     );
 
-    conversations.sort((a, b) => {
-      return b.messages[0].createdAt - a.messages[0].createdAt;
-    });
-
     //console.log(conversations);
 
     // Log messages grouped by conversation
@@ -161,23 +157,23 @@ export async function getAConversationController(req, res, next) {
         { sender: thisUserId, recipient: selectedUserId },
         { sender: selectedUserId, recipient: thisUserId },
       ],
-    }).sort({ createdAt: 1 });
+    }).sort({ createdAt: -1 });
     console.log(conversation);
 
     if (conversation.length === 0) {
       //create new conversation
-      const newConversation = await MessageModel.create({
+      const newMessage = await MessageModel.create({
         sender: thisUserId,
         recipient: selectedUserId,
         message: "Hi 👋",
       });
-      await newConversation.save();
+      await newMessage.save();
 
       return res.status(200).json({
         answer: {
           code: 200,
           message: "New conversation created",
-          data: newConversation,
+          data: newMessage,
         },
       });
     } else {
