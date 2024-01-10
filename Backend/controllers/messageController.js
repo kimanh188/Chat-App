@@ -108,7 +108,7 @@ export async function getAConversationController(req, res, next) {
         { sender: thisUserName, recipient: selectedUsername },
         { sender: selectedUsername, recipient: thisUserName },
       ],
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: 1 });
 
     if (conversation.length === 0) {
       const newMessage = await MessageModel.create({

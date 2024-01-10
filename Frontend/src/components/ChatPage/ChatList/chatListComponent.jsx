@@ -1,56 +1,16 @@
-import { useState, useContext, useEffect } from "react";
-import { UserContext } from "../../../contexts/userContext.jsx";
+import { useState } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { SearchComponent } from "../SearchBar/searchComponent.jsx";
 import { UserProfileComponent } from "../../UserProfile/userProfileComponent.jsx";
+import { ChatBoxComponent } from "../ChatBox/chatBoxComponent.jsx";
 
-export function ChatListComponent() {
-  const { loggedInUsername } = useContext(UserContext);
-  const storedUsername = localStorage.getItem("loggedInUsername") || "";
-  const [token, setToken] = useState("");
-  const [conversations, setConversations] = useState([]);
-
-  const retrieveToken = () => {
-    try {
-      const storedToken = Cookies.get("jwt");
-      console.log("1. Stored token: ", storedToken);
-      setToken(storedToken);
-    } catch (error) {
-      console.log("Error retrieving token: ", error);
-    }
-  };
-
-  const getConversations = async () => {
-    try {
-      //console.log("token: " + token);
-      const response = await axios.get("http://localhost:3022/chat", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
-      console.log("2. Response getConversations: ", response.data.answer.data);
-      setConversations(response.data.answer.data);
-    } catch (error) {
-      console.log("Error fetching conversations: ", error);
-    }
-  };
-
-  useEffect(() => {
-    if (loggedInUsername) {
-      localStorage.setItem("loggedInUsername", loggedInUsername);
-    }
-  }, [loggedInUsername]);
-
-  useEffect(() => {
-    retrieveToken();
-  }, [token]);
-
-  useEffect(() => {
-    getConversations();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // This will run only when conversations change
+export function ChatListComponent({
+  token,
+  loggedInUsername,
+  storedUsername,
+  conversations,
+}) {
+  const [selectedChat, setSelectedChat] = useState([]);
 
   const chooseAConversationHandler = async (event, selectedConversation) => {
     try {
@@ -65,7 +25,11 @@ export function ChatListComponent() {
           withCredentials: true,
         }
       );
-      console.log(response.data.answer.data);
+      const chatObjectArray = response.data.answer.data;
+      chatObjectArray.forEach((message) => {
+        setSelectedChat((prevMes) => [...prevMes, message.message]);
+      });
+      /* setSelectedChat(response.data.answer.data); */
     } catch (error) {
       console.log("Error during fetching chat: " + error);
     }
@@ -107,6 +71,8 @@ export function ChatListComponent() {
           </div>
         </div>
       </div>
+
+      <ChatBoxComponent selectedChat={selectedChat} />
     </>
   );
 }
