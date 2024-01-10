@@ -16,7 +16,7 @@ export function LoginView({
     >
       <label
         htmlFor="email"
-        className="block mb-2 pl-2 font-bold text-gray-600"
+        className="block mb-2 pl-2 font-bold text-indigo-900"
       >
         Email *:
       </label>
@@ -25,14 +25,14 @@ export function LoginView({
         id="login-email"
         name="email"
         placeholder="Your email"
-        className="block w-full p-2 mb-2 rounded-sm bg-gray-50 focus:bg-white text-gray-600"
+        className="block w-full p-2 mb-2 rounded-sm bg-gray-50 focus:bg-white text-indigo-900"
         required={true}
         onChange={emailInputHandler}
       />
 
       <label
         htmlFor="password"
-        className="block mb-2 pl-2 font-bold text-gray-600"
+        className="block mb-2 pl-2 font-bold text-indigo-900"
       >
         Password *:
       </label>
@@ -44,7 +44,7 @@ export function LoginView({
           name="password"
           placeholder="Your password"
           required={true}
-          className="block w-full p-2 mb-2 rounded-sm bg-gray-50 focus:bg-white text-gray-600"
+          className="block w-full p-2 mb-2 rounded-sm bg-gray-50 focus:bg-white text-indigo-900"
           onChange={passwordInputHandler}
         />
         <button
@@ -66,7 +66,7 @@ export function LoginView({
 
       <button
         type="submit"
-        className="bg-blue-500 text-white block w-full p-2 rounded-md font-bold hover:text-blue-500 hover:bg-blue-200"
+        className="bg-yellow-500 text-white block w-full p-2 rounded-md font-bold hover:text-indigo-900 hover:bg-yellow-200"
       >
         Login
       </button>

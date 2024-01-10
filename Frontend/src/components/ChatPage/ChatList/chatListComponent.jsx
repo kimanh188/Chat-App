@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router";
+//import { useNavigate } from "react-router";
 import { UserContext } from "../../../contexts/userContext.jsx";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -63,10 +63,10 @@ export function ChatListComponent() {
 
   return (
     <>
-      <div className="w-1/3 h-screen bg-yellow-100 px-5 text-gray-900">
+      <div className="w-1/3 h-screen bg-purple-600 px-5 text-gray-900 ">
         <SearchComponent />
         <div className="flex justify-between items-center pt-5 ">
-          <h1 className="text-2xl inline-block w-2/3">
+          <h1 className="text-white text-2xl inline-block w-2/3">
             Welcome {loggedInUsername || storedUsername}!
           </h1>
 
@@ -74,21 +74,22 @@ export function ChatListComponent() {
         </div>
 
         <div>
-          <h2 className="py-5">
+          <h2 className="py-5 text-gray-400">
             All conversations with the latest message here
           </h2>
           <div>
             {conversations.map((conversation, index) => (
               <button
                 key={index}
-                className="p-2 mb-4 bg-blue-300 rounded-md hover:bg-gray-100 text-left border w-full"
+                className="p-2 mb-4 bg-yellow-500 rounded-md hover:bg-yellow-200 text-left border w-full"
                 /* onClick={chooseAConversationHandler} */
               >
                 <h3 className="font-bold">{conversation.conversationName}</h3>
-                <div>
-                  {conversation.messages.map((mes, index) => (
+                <div className="truncate">
+                  {conversation.messages[0].message}
+                  {/* {conversation.messages.map((mes, index) => (
                     <p key={index}>{mes.message}</p>
-                  ))}
+                  ))} */}
                 </div>
               </button>
             ))}

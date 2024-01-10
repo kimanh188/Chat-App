@@ -17,7 +17,7 @@ export function RegisterView({
     >
       <label
         htmlFor="email"
-        className="block mb-2 pl-2 font-bold text-gray-600"
+        className="block mb-2 pl-2 font-bold text-indigo-900 "
       >
         Email *:
       </label>
@@ -28,12 +28,12 @@ export function RegisterView({
         placeholder="yourMagicMail@example.com"
         required={true}
         onChange={emailInputHandler}
-        className="block w-full p-2 mb-2 rounded-sm  bg-gray-50 focus:bg-white text-gray-600"
+        className="block w-full p-2 mb-2 rounded-sm  bg-gray-50 focus:bg-white text-indigo-900 "
       />
 
       <label
         htmlFor="username"
-        className="block mb-2 pl-2 font-bold text-gray-600"
+        className="block mb-2 pl-2 font-bold text-indigo-900 "
       >
         Username *:
       </label>
@@ -44,12 +44,12 @@ export function RegisterView({
         placeholder="ChattingWizard"
         required={true}
         onChange={usernameInputHandler}
-        className="block w-full p-2 mb-2 rounded-sm  bg-gray-50 focus:bg-white text-gray-600"
+        className="block w-full p-2 mb-2 rounded-sm  bg-gray-50 focus:bg-white text-indigo-900 "
       />
 
       <label
         htmlFor="password"
-        className="block mb-2 pl-2 font-bold text-gray-600"
+        className="block mb-2 pl-2 font-bold text-indigo-900 "
       >
         Password *:
       </label>
@@ -61,7 +61,7 @@ export function RegisterView({
           placeholder="Secure your account with 8+ chars, 1 UPPERCASE"
           required={true}
           onChange={passwordInputHandler}
-          className="block w-full p-2 mb-2 rounded-sm  bg-gray-50 focus:bg-white text-gray-600"
+          className="block w-full p-2 mb-2 rounded-sm  bg-gray-50 focus:bg-white text-indigo-900 "
         />
         <button
           className="absolute inset-y-0 right-3 flex items-center pr-2 cursor-pointer"
@@ -90,7 +90,7 @@ export function RegisterView({
 
       <button
         type="submit"
-        className="bg-blue-500 text-white block w-full p-2 rounded-md font-bold hover:text-blue-500 hover:bg-blue-200"
+        className="bg-yellow-500 text-white block w-full p-2 rounded-md font-bold hover:text-indigo-900 hover:bg-yellow-200"
       >
         Register
       </button>
