@@ -16,19 +16,25 @@ await mongoConnect();
 console.log("Creating messages...");
 
 // Function to get a random user ObjectId from the database
-const getRandomUserObjectId = async () => {
-  const users = await UserModel.find({}, "_id"); // Fetch all user ObjectId values
+const getRandomUser = async () => {
+  const allUsernames = await UserModel.find({}, "username"); // Fetch all user objects containing only the username
 
   // Pick a random user ObjectId
-  const randomUser = users[Math.floor(Math.random() * users.length)];
-  return randomUser._id;
+  const randomUser =
+    allUsernames[Math.floor(Math.random() * allUsernames.length)];
+  return randomUser.username;
 };
 
 async function createMessages(docsToCreate) {
   try {
     for (let i = 0; i < docsToCreate; i++) {
-      const sender = await getRandomUserObjectId();
-      const recipient = await getRandomUserObjectId();
+      let sender = "testUser";
+
+      let recipient = await getRandomUser();
+
+      while (sender === recipient) {
+        recipient = await getRandomUser();
+      }
 
       await MessageModel.create({
         sender: sender,

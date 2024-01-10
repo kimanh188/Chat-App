@@ -1,19 +1,14 @@
-import mongoose from "mongoose";
+//import mongoose from "mongoose";
 import { MessageModel } from "../models/messageModel.js";
 import { UserModel } from "../models/userModel.js";
 import { errorCreator } from "../lib/errorCreator.js";
 
 export async function getAllConversationsController(req, res, next) {
   try {
-    // Access user information from req object
-    const thisUserId = req.user._id;
-    const userName = req.user.username;
-    //console.log("This User: " + userName + ", Id:" + thisUserId);
-    const thisUserIdObject = new mongoose.Types.ObjectId(thisUserId);
+    const thisUserName = req.user.username;
 
-    // Retrieve all messages of the user
     const allMessages = await MessageModel.find({
-      $or: [{ sender: thisUserId }, { recipient: thisUserId }],
+      $or: [{ sender: thisUserName }, { recipient: thisUserName }],
     }).sort({ createdAt: -1 });
 
     if (!allMessages || allMessages.length === 0) {
@@ -25,94 +20,50 @@ export async function getAllConversationsController(req, res, next) {
       });
     }
 
-    //Retrieve all usersIds that this user has chatted with
-    const otherUsersIds = [];
+    const otherUsernames = [];
 
     allMessages.forEach((message) => {
-      const senderIdString = message.sender.toString();
-      const recipientIdString = message.recipient.toString();
+      const sender = message.sender;
+      const recipient = message.recipient;
 
-      if (
-        message.sender.equals(thisUserIdObject) &&
-        !otherUsersIds.includes(recipientIdString)
-      ) {
-        otherUsersIds.push(recipientIdString);
+      if (sender === thisUserName && !otherUsernames.includes(recipient)) {
+        otherUsernames.push(recipient);
       } else if (
-        message.recipient.equals(thisUserIdObject) &&
-        !otherUsersIds.includes(senderIdString)
+        recipient === thisUserName &&
+        !otherUsernames.includes(sender)
       ) {
-        otherUsersIds.push(senderIdString);
+        otherUsernames.push(sender);
       }
     });
-    //console.log("Other userIds that thisUser has chatted with:  " + otherUsersIds);
 
-    // Retrieves otherUsers with their username based on the otherUsersIds
-    const otherUsers = [];
-
-    for (const userId of otherUsersIds) {
-      const user = await UserModel.findById(userId).select("username");
-      otherUsers.push(user);
-    }
-    //console.log("Other users that thisUser has chatted with: " + otherUsers);
-
-    // Create a map to track conversations based on sender and recipient combinations
     const conversationMap = new Map();
 
     allMessages.forEach((message) => {
-      const otherUserId = message.sender.equals(thisUserIdObject)
-        ? message.recipient
-        : message.sender;
+      const theOtherUsername =
+        message.sender === thisUserName ? message.recipient : message.sender;
 
-      const conversationKey = `${otherUserId}-${thisUserId}`;
-      //console.log("Conversation key: " + conversationKey);
+      const conversationKey = `${theOtherUsername}-${thisUserName}`;
 
-      // If the conversation doesn't exist for this pair, create a new one
       if (!conversationMap.has(conversationKey)) {
         conversationMap.set(conversationKey, []);
       }
 
-      // Add the message to the corresponding conversation
       conversationMap.get(conversationKey).push(message);
     });
-    //console.log(conversationMap);
 
-    // Iterate over the conversation map and return the final list of conversations as an array of objects
     const conversations = Array.from(conversationMap.entries()).map(
       ([conversationKey, messages]) => {
-        const participantIds = conversationKey.split("-");
-        //console.log("ParticipantIds: " + participantIds);
-        const otherUserId = participantIds.find((id) => id !== thisUserId);
-        //console.log("OtherUserId: " + otherUserId);
-
-        const otherUser = otherUsers.find(
-          (user) => user._id.toString() === otherUserId
-        );
-
-        const conversationName = otherUser ? otherUser.username : "Unknown";
-
-        //sort messages by createdAt from oldest to newest
-        messages.sort((a, b) => {
-          return b.createdAt - a.createdAt;
-        });
-
+        const participants = conversationKey.split("-");
+        const interlocutor = participants.find((name) => name !== thisUserName);
+        const conversationName = interlocutor || "Unknown";
         return { conversationName, messages };
       }
     );
 
-    //console.log(conversations);
-
-    // Log messages grouped by conversation
-    /*  conversations.forEach((conversation) => {
-      console.log(`Conversation: ${conversation.conversationName}`);
-      conversation.messages.forEach((message) => {
-        console.log(message.message);
-      });
-    }); */
-
     res.status(200).json({
       answer: {
         code: 200,
-        message: `All conversations of ${userName} retrieved`,
+        message: `All conversations of ${thisUserName} retrieved`,
         data: conversations,
       },
     });
@@ -124,15 +75,15 @@ export async function getAllConversationsController(req, res, next) {
 
 export async function getAConversationController(req, res, next) {
   try {
-    // Access user information from req object
-    const thisUserId = req.user._id;
-    console.log(thisUserId);
+    const thisUserName = req.user.username;
 
-    const { ObjectId } = mongoose.Types;
-    const selectedUserId = new ObjectId(req.params.id);
-    console.log(selectedUserId);
+    const selectedUsername = req.params.username;
 
-    if (thisUserId.equals(selectedUserId)) {
+    const interlocutor = await UserModel.findOne({
+      username: selectedUsername,
+    });
+
+    if (thisUserName === selectedUsername) {
       return res.status(400).json({
         answer: {
           code: 400,
@@ -142,7 +93,7 @@ export async function getAConversationController(req, res, next) {
       });
     }
 
-    if (!selectedUserId) {
+    if (!interlocutor) {
       return res.status(400).json({
         answer: {
           code: 400,
@@ -154,17 +105,15 @@ export async function getAConversationController(req, res, next) {
     // Retrieve conversation with the specified user
     const conversation = await MessageModel.find({
       $or: [
-        { sender: thisUserId, recipient: selectedUserId },
-        { sender: selectedUserId, recipient: thisUserId },
+        { sender: thisUserName, recipient: selectedUsername },
+        { sender: selectedUsername, recipient: thisUserName },
       ],
     }).sort({ createdAt: -1 });
-    console.log(conversation);
 
     if (conversation.length === 0) {
-      //create new conversation
       const newMessage = await MessageModel.create({
-        sender: thisUserId,
-        recipient: selectedUserId,
+        sender: thisUserName,
+        recipient: selectedUsername,
         message: "Hi 👋",
       });
       await newMessage.save();

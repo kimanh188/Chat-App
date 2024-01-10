@@ -52,13 +52,23 @@ export function ChatListComponent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // This will run only when conversations change
 
-  const chooseAConversationHandler = async (conversation) => {
-    getConversations();
-    /*  try {
-      const response = await axios.get(`http://localhost:3022/chat/${}`)
+  const chooseAConversationHandler = async (event, selectedConversation) => {
+    try {
+      event.stopPropagation();
+      const conversationName = selectedConversation.conversationName;
+      const response = await axios.get(
+        `http://localhost:3022/chat/${conversationName}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+      console.log(response.data.answer.data);
     } catch (error) {
-      console.log("Error fetching a conversation: ", error);
-    } */
+      console.log("Error during fetching chat: " + error);
+    }
   };
 
   return (
@@ -82,16 +92,15 @@ export function ChatListComponent() {
               <button
                 key={index}
                 className="p-2 mb-4 rounded-md bg-yellow-500 hover:bg-yellow-100 text-left border-none w-full"
-                onClick={chooseAConversationHandler}
+                onClick={(event) =>
+                  chooseAConversationHandler(event, conversation)
+                }
               >
                 <h3 className="font-bold text-indigo-900">
                   {conversation.conversationName}
                 </h3>
                 <div className="truncate text-white hover:text-indigo-900">
                   {conversation.messages[0].message}
-                  {/* {conversation.messages.map((mes, index) => (
-                    <p key={index}>{mes.message}</p>
-                  ))} */}
                 </div>
               </button>
             ))}

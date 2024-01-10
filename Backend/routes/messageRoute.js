@@ -9,4 +9,4 @@ export const messageRouter = Router();
 
 messageRouter.get("/", jwtVerifier, getAllConversationsController);
 
-messageRouter.get("/:id", jwtVerifier, getAConversationController);
+messageRouter.get("/:username", jwtVerifier, getAConversationController);
