@@ -67,13 +67,16 @@ export function RegisterComponent() {
         console.log("Error response:", error.response);
 
         const { status, data } = error.response;
+        console.log(status, data);
 
         if (status === 400) {
           data.answer.errors.forEach((error) => {
             console.log("Error message: ", error.msg);
             setErrors((prevErrors) => [...prevErrors, error.msg]);
           });
-          return;
+        }
+        if (status === 401) {
+          setErrors((prevErrors) => [...prevErrors, data.answer.message]);
         }
       }
 

@@ -24,7 +24,7 @@ export async function registerPostController(req, res, next) {
     });
   } catch (error) {
     console.log(error);
-    next(errorCreator(401, "User already exists"));
+    next(errorCreator(401, "Email or username already exists"));
   }
 }
 

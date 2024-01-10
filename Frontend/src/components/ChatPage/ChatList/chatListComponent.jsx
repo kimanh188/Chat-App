@@ -52,18 +52,18 @@ export function ChatListComponent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // This will run only when conversations change
 
-  /*   const chooseAConversationHandler = async () => {
-    //
-    try {
+  const chooseAConversationHandler = async (conversation) => {
+    getConversations();
+    /*  try {
       const response = await axios.get(`http://localhost:3022/chat/${}`)
     } catch (error) {
       console.log("Error fetching a conversation: ", error);
-    }
-  }; */
+    } */
+  };
 
   return (
     <>
-      <div className="w-1/3 h-screen bg-purple-600 px-5 text-gray-900 ">
+      <div className="w-1/3 h-screen bg-purple-500 px-5 text-gray-900 ">
         <SearchComponent />
         <div className="flex justify-between items-center pt-5 ">
           <h1 className="text-white text-2xl inline-block w-2/3">
@@ -81,11 +81,13 @@ export function ChatListComponent() {
             {conversations.map((conversation, index) => (
               <button
                 key={index}
-                className="p-2 mb-4 bg-yellow-500 rounded-md hover:bg-yellow-200 text-left border w-full"
-                /* onClick={chooseAConversationHandler} */
+                className="p-2 mb-4 rounded-md bg-yellow-500 hover:bg-yellow-100 text-left border-none w-full"
+                onClick={chooseAConversationHandler}
               >
-                <h3 className="font-bold">{conversation.conversationName}</h3>
-                <div className="truncate">
+                <h3 className="font-bold text-indigo-900">
+                  {conversation.conversationName}
+                </h3>
+                <div className="truncate text-white hover:text-indigo-900">
                   {conversation.messages[0].message}
                   {/* {conversation.messages.map((mes, index) => (
                     <p key={index}>{mes.message}</p>
