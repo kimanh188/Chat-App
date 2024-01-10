@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from "react";
-//import { useNavigate } from "react-router";
 import { UserContext } from "../../../contexts/userContext.jsx";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -46,10 +45,11 @@ export function ChatListComponent() {
 
   useEffect(() => {
     retrieveToken();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     getConversations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // This will run only when conversations change
 
   /*   const chooseAConversationHandler = async () => {
