@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { SearchComponent } from "../SearchBar/searchComponent.jsx";
-import { UserProfileComponent } from "../../UserProfile/userProfileComponent.jsx";
-import { ChatBoxComponent } from "../ChatBox/chatBoxComponent.jsx";
+import { SearchComponent } from "./SearchBar/searchComponent.jsx";
+import { UserProfileComponent } from "../UserProfile/userProfileComponent.jsx";
+import { ChatBoxComponent } from "./ChatBox/chatBoxComponent.jsx";
 
-export function ChatListComponent({
+export function ChatPageComponent({
   token,
   loggedInUsername,
   storedUsername,
@@ -15,6 +15,8 @@ export function ChatListComponent({
   const chooseAConversationHandler = async (event, selectedConversation) => {
     try {
       event.stopPropagation();
+      setSelectedChat([]);
+
       const conversationName = selectedConversation.conversationName;
       const response = await axios.get(
         `http://localhost:3022/chat/${conversationName}`,
@@ -26,10 +28,7 @@ export function ChatListComponent({
         }
       );
       const chatObjectArray = response.data.answer.data;
-      chatObjectArray.forEach((message) => {
-        setSelectedChat((prevMes) => [...prevMes, message.message]);
-      });
-      /* setSelectedChat(response.data.answer.data); */
+      setSelectedChat(chatObjectArray);
     } catch (error) {
       console.log("Error during fetching chat: " + error);
     }
@@ -55,7 +54,7 @@ export function ChatListComponent({
             {conversations.map((conversation, index) => (
               <button
                 key={index}
-                className="p-2 mb-4 rounded-md bg-yellow-500 hover:bg-yellow-100 text-left border-none w-full"
+                className="p-2 mb-4 rounded-md bg-yellow-500 hover:bg-yellow-100 focus:bg-yellow-100 text-left border-none w-full"
                 onClick={(event) =>
                   chooseAConversationHandler(event, conversation)
                 }
@@ -72,7 +71,10 @@ export function ChatListComponent({
         </div>
       </div>
 
-      <ChatBoxComponent selectedChat={selectedChat} />
+      <ChatBoxComponent
+        selectedChat={selectedChat}
+        currentUser={loggedInUsername || storedUsername}
+      />
     </>
   );
 }

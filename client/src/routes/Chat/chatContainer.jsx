@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/userContext.jsx";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { ChatListComponent } from "../../components/ChatPage/ChatList/chatListComponent.jsx";
+import { ChatPageComponent } from "../../components/ChatPage/chatPageComponent.jsx";
 
 export function ChatPage() {
   const { loggedInUsername } = useContext(UserContext);
@@ -53,7 +53,7 @@ export function ChatPage() {
 
   return (
     <div className="flex">
-      <ChatListComponent
+      <ChatPageComponent
         token={token}
         loggedInUsername={loggedInUsername}
         storedUsername={storedUsername}
