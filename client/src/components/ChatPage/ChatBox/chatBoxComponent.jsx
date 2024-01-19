@@ -8,20 +8,18 @@ export function ChatBoxComponent({ selectedChat, currentUser }) {
       ) : (
         <div>
           {selectedChat.map((message, index) => (
-            <div key={index} className="py-2">
-              <span className="text-yellow-500 font-bold">
+            <div className="my-4 w-full flex items-center" key={index}>
+              <span className="text-yellow-500 font-bold float-left mr-2">
                 {message.sender === currentUser ? "" : message.sender}
               </span>
 
-              <div className="">
-                <span
-                  className={`text-indigo-900 bg-white rounded-lg p-2 mb-1 max-w-[70%] ${
-                    message.sender === currentUser ? "float-right" : ""
-                  }`}
-                >
-                  {message.message}
-                </span>
-              </div>
+              <span
+                className={`text-indigo-900 bg-white rounded-lg p-2 max-w-[70%] flex justify-between ${
+                  message.sender === currentUser ? "ml-auto" : ""
+                }`}
+              >
+                {message.message}
+              </span>
             </div>
           ))}
         </div>

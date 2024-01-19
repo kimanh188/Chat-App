@@ -38,7 +38,7 @@ export function ChatPageComponent({
     <>
       <div className="w-1/3 h-screen bg-purple-500 px-5 text-gray-900 ">
         <SearchComponent />
-        <div className="flex justify-between items-center pt-5 ">
+        <div className="flex justify-between items-center pt-5 py-8">
           <h1 className="text-white text-2xl inline-block w-2/3">
             Welcome {loggedInUsername || storedUsername}!
           </h1>
@@ -47,14 +47,14 @@ export function ChatPageComponent({
         </div>
 
         <div>
-          <h2 className="py-5 text-gray-400">
+          {/* <h2 className="py-5 text-gray-400">
             All conversations with the latest message here
-          </h2>
+          </h2> */}
           <div>
             {conversations.map((conversation, index) => (
               <button
                 key={index}
-                className="p-2 mb-4 rounded-md bg-yellow-500 hover:bg-yellow-100 focus:bg-yellow-100 text-left border-none w-full"
+                className="p-2 mb-4 rounded-md bg-yellow-500 hover:bg-yellow-300 focus:text-indigo-900 focus:bg-yellow-100 text-left border-none w-full"
                 onClick={(event) =>
                   chooseAConversationHandler(event, conversation)
                 }
@@ -62,7 +62,7 @@ export function ChatPageComponent({
                 <h3 className="font-bold text-indigo-900">
                   {conversation.conversationName}
                 </h3>
-                <div className="truncate text-white hover:text-indigo-900">
+                <div className="truncate text-indigo-900">
                   {conversation.messages[0].message}
                 </div>
               </button>
