@@ -80,14 +80,18 @@ export function ChatPage() {
     <div className="flex">
       {/* <ChatPageComponent token={token} conversations={conversations} /> */}
       <div className="w-1/3 h-screen bg-purple-500 px-5 text-gray-900 ">
-        <SearchComponent />
-        <div className="flex justify-between items-center pt-5 py-8">
+        <div className="flex justify-between items-center pt-5">
           <h1 className="text-white text-2xl inline-block w-2/3">
             Welcome {loggedInUsername || storedUsername}!
           </h1>
 
           <ProfileButtonComponent token={token} />
         </div>
+
+        <SearchComponent
+          conversations={conversations}
+          chooseAConversationHandler={chooseAConversationHandler}
+        />
 
         <div>
           {conversations.length === 0 ? (
