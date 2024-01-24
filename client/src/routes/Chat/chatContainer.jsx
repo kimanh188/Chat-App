@@ -2,9 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 //import { ChatPageComponent } from "../../components/ChatPage/chatPageComponent.jsx";
-import { SearchComponent } from "../../components/ChatPage/SearchBar/searchComponent.jsx";
-import { ProfileButtonComponent } from "../../components/ChatPage/ProfileImgButton/profileButtonComponent.jsx";
-import { ChatBoxComponent } from "../../components/ChatPage/ChatBox/chatBoxComponent.jsx";
+import { SearchComponent } from "../../components/Chat/SearchBar/searchComponent.jsx";
+import { ProfileButtonComponent } from "../../components/Chat/ProfileImgButton/profileButtonComponent.jsx";
+import { ChatBoxComponent } from "../../components/Chat/ChatBox/chatBoxComponent.jsx";
 import { UserContext } from "../../contexts/userContext.jsx";
 
 export function ChatPage() {
@@ -19,7 +19,7 @@ export function ChatPage() {
   const retrieveToken = () => {
     try {
       const storedToken = Cookies.get("jwt");
-      console.log("1. Stored token: ", storedToken);
+      //console.log("1. Stored token: ", storedToken);
       setToken(storedToken);
     } catch (error) {
       console.log("Error retrieving token: ", error);
@@ -35,7 +35,7 @@ export function ChatPage() {
         },
         withCredentials: true,
       });
-      console.log("2. Response getConversations: ", response.data.answer.data);
+      //console.log("2. Response getConversations: ", response.data.answer.data);
       setConversations(response.data.answer.data);
     } catch (error) {
       console.log("Error fetching conversations: ", error);
@@ -72,12 +72,9 @@ export function ChatPage() {
 
   useEffect(() => {
     retrieveToken();
-  }, [token]);
-
-  useEffect(() => {
     getConversations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // This will run only when conversations change
+  }, []);
 
   return (
     <div className="flex">

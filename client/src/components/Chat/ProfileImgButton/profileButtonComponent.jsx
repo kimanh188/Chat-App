@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { UserContext } from "../../../contexts/userContext.jsx";
 import { ProfileButtonView } from "./View/profileButtonView.jsx";
 
-export function ProfileButtonComponent({ token }) {
+export function ProfileButtonComponent() {
   const navigate = useNavigate();
 
   const { loggedInProfileImg } = useContext(UserContext);
@@ -17,24 +17,7 @@ export function ProfileButtonComponent({ token }) {
   //console.log("Profile Image Path:", profileImgPath);
 
   const profileRouteHandler = async () => {
-    try {
-      /* const getProfile = async () => {
-        const response = await axios.get("http://localhost:3022/user/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        });
-        const profile = response.data.answer.data;
-        for (const key in profile) {
-          console.log(`${key}: ${profile[key]}`);
-        }
-      };
-      getProfile(); */
-      navigate("/profile");
-    } catch (error) {
-      console.log("Error fetching user's profile: ", error);
-    }
+    navigate("/profile");
   };
 
   useEffect(() => {

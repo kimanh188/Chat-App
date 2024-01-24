@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { TablistComponent } from "../../components/Homepage-Tabs/tablistComponent.jsx";
+import { TablistComponent } from "../../components/Home/tablistComponent.jsx";
 import { UserContext } from "../../contexts/userContext.jsx";
 
 export function Homepage() {

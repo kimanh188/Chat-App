@@ -11,6 +11,7 @@ import {
 import { userRouter } from "./routes/userRoute.js";
 import { profileRouter } from "./routes/userProfileRoute.js";
 import { messageRouter } from "./routes/messageRoute.js";
+import { searchRouter } from "./routes/searchRoute.js";
 config();
 
 mongoErrorListener();
@@ -31,6 +32,7 @@ app.use(
 app.use("/user", userRouter);
 app.use("/user/profile", profileRouter);
 app.use("/chat", messageRouter);
+app.use("/search", searchRouter);
 
 app.use("/uploads", express.static("uploads"));
 
