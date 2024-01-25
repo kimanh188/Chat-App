@@ -9,11 +9,26 @@ import { MessageModel } from "../models/messageModel.js";
 import { UserModel } from "../models/userModel.js";
 import { mongoConnect } from "../configs/db.connect.js";
 
-console.log("MongoDB String:", process.env.DB_CONNECTION_STRING);
-
 await mongoConnect();
 
-console.log("Creating messages...");
+console.log("Connected to DB...");
+
+const createUsers = async (usersToCreate) => {
+  try {
+    for (let i = 0; i < usersToCreate; i++) {
+      await UserModel.create({
+        email: faker.internet.email(),
+        username: faker.person.firstName(),
+        password: faker.internet.password({ length: 8 }, { uppercase: true }),
+      });
+    }
+    console.log("Users created");
+  } catch (error) {
+    console.log(error);
+  } finally {
+    mongoose.disconnect();
+  }
+};
 
 // Function to get a random user ObjectId from the database
 const getRandomUser = async () => {
@@ -25,10 +40,10 @@ const getRandomUser = async () => {
   return randomUser.username;
 };
 
-async function createMessages(docsToCreate) {
+const createMessages = async (docsToCreate) => {
   try {
     for (let i = 0; i < docsToCreate; i++) {
-      let sender = "testUser";
+      let sender = await getRandomUser();
 
       let recipient = await getRandomUser();
 
@@ -48,6 +63,20 @@ async function createMessages(docsToCreate) {
   } finally {
     mongoose.disconnect();
   }
-}
+};
 
-await createMessages(3);
+//await createUsers(5);
+await createMessages(20);
+
+/* const deleteAllMessages = async () => {
+  try {
+    await MessageModel.deleteMany({});
+    console.log("All messages deleted");
+  } catch (error) {
+    console.log(error);
+  } finally {
+    mongoose.disconnect();
+  }
+};
+
+await deleteAllMessages(); */
