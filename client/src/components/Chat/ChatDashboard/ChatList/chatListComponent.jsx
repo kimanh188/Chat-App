@@ -3,7 +3,7 @@ export function ChatListComponent({
   chooseAConversationHandler,
 }) {
   return (
-    <div>
+    <div className="pt-5">
       {conversations.length === 0 ? (
         <h2 className="py-5 text-gray-400">
           All conversations with the latest message here. But first, search a
