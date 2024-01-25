@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 //import axios from "axios";
-import { UserContext } from "../../../contexts/userContext.jsx";
+import { UserContext } from "../../../../contexts/userContext.jsx";
 import { ProfileButtonView } from "./View/profileButtonView.jsx";
 
 export function ProfileButtonComponent() {

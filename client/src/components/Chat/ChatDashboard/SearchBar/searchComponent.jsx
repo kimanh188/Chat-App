@@ -50,6 +50,12 @@ export function SearchComponent({ conversations, chooseAConversationHandler }) {
     }
   };
 
+  const cancelHandler = () => {
+    setShowCancel(false);
+    setSearchInput("");
+    setSearchResults([]);
+  };
+
   return (
     <>
       <div className="pt-3 pb-8">
@@ -61,7 +67,12 @@ export function SearchComponent({ conversations, chooseAConversationHandler }) {
               placeholder="Search for a friend..."
               onChange={searchInputHandler}
             />
-            <button className="text-white mt-3 rounded-md w-1/6">Cancel</button>
+            <button
+              className="text-white mt-3 rounded-md w-1/6"
+              onClick={cancelHandler}
+            >
+              Cancel
+            </button>
           </div>
         ) : (
           <input

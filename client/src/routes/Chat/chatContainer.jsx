@@ -1,11 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-//import { ChatPageComponent } from "../../components/ChatPage/chatPageComponent.jsx";
-import { SearchComponent } from "../../components/Chat/SearchBar/searchComponent.jsx";
-import { ProfileButtonComponent } from "../../components/Chat/ProfileImgButton/profileButtonComponent.jsx";
 import { ChatBoxComponent } from "../../components/Chat/ChatBox/chatBoxComponent.jsx";
 import { UserContext } from "../../contexts/userContext.jsx";
+import { ChatDashboardComponent } from "../../components/Chat/ChatDashboard/chatDashboardComponent.jsx";
 
 export function ChatPage() {
   const [token, setToken] = useState("");
@@ -78,49 +76,12 @@ export function ChatPage() {
 
   return (
     <div className="flex">
-      {/* <ChatPageComponent token={token} conversations={conversations} /> */}
-      <div className="w-1/3 h-screen bg-purple-500 px-5 text-gray-900 ">
-        <div className="flex justify-between items-center pt-5">
-          <h1 className="text-white text-2xl inline-block w-2/3">
-            Welcome {loggedInUsername || storedUsername}!
-          </h1>
-
-          <ProfileButtonComponent token={token} />
-        </div>
-
-        <SearchComponent
-          conversations={conversations}
-          chooseAConversationHandler={chooseAConversationHandler}
-        />
-
-        <div>
-          {conversations.length === 0 ? (
-            <h2 className="py-5 text-gray-400">
-              All conversations with the latest message here. But first, search
-              a user to start a new conversation!
-            </h2>
-          ) : (
-            <div>
-              {conversations.map((conversation, index) => (
-                <button
-                  key={index}
-                  className="p-2 mb-4 rounded-md bg-yellow-500 hover:bg-yellow-300 focus:text-indigo-900 focus:bg-yellow-100 text-left border-none w-full"
-                  onClick={(event) =>
-                    chooseAConversationHandler(event, conversation)
-                  }
-                >
-                  <h3 className="font-bold text-indigo-900">
-                    {conversation.conversationName}
-                  </h3>
-                  <div className="truncate text-indigo-900">
-                    {conversation.messages[0].message}
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+      <ChatDashboardComponent
+        token={token}
+        currentUser={loggedInUsername || storedUsername}
+        conversations={conversations}
+        chooseAConversationHandler={chooseAConversationHandler}
+      />
 
       <ChatBoxComponent
         selectedChat={selectedChat}
