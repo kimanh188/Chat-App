@@ -10,10 +10,10 @@ export function ProfileButtonComponent() {
   const { loggedInProfileImg } = useContext(UserContext);
   const storedProfileImg = localStorage.getItem("loggedInProfileImg") || "";
 
-  const profileImgPath =
+  const profileImgPath = `http://localhost:3022/${
     loggedInProfileImg || storedProfileImg
-      ? `http://localhost:3022/${loggedInProfileImg || storedProfileImg}`
-      : "src/assets/default-user-avatar.svg";
+  }`;
+
   //console.log("Profile Image Path:", profileImgPath);
 
   const profileRouteHandler = async () => {

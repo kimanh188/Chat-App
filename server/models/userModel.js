@@ -29,6 +29,13 @@ const userSchema = new Schema(
   }
 );
 
+userSchema.pre("save", function (next) {
+  if (!this.profileImg) {
+    this.profileImg = "../uploads/user.png";
+  }
+  next();
+});
+
 // Hash password before saving to database
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {

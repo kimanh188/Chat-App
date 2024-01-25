@@ -5,7 +5,7 @@ export function ProfileButtonView({ profileImgPath, profileRouteHandler }) {
         <img
           src={profileImgPath}
           alt="User Avatar"
-          className="bg-blue-200 rounded-full p-1 w-16 h-16 object-cover"
+          className="rounded-full w-16 h-16 object-cover"
         />
       </button>
     </div>
