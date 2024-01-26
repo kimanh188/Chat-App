@@ -8,6 +8,7 @@ export async function showAllUsers(req, res, next) {
     const allUsers = await UserModel.find({
       username: { $ne: thisUsername },
     });
+
     //console.log(allUsers);
 
     if (!allUsers || allUsers.length === 0) {

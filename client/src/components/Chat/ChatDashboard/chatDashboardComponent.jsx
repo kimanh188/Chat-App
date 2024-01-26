@@ -91,7 +91,10 @@ export function ChatDashboardComponent({
           chooseAConversationHandler={chooseAConversationHandler}
         />
       ) : (
-        <SearchResultComponent searchResults={searchResults} />
+        <SearchResultComponent
+          searchResults={searchResults}
+          chooseAConversationHandler={chooseAConversationHandler}
+        />
       )}
     </div>
   );

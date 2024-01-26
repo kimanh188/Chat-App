@@ -40,23 +40,28 @@ export function ChatPage() {
     }
   };
 
-  const chooseAConversationHandler = async (event, selectedConversation) => {
+  const chooseAConversationHandler = async (event, selectedEntity) => {
     try {
       event.stopPropagation();
       setSelectedChat([]);
 
-      const conversationName = selectedConversation.conversationName;
-      const response = await axios.get(
-        `http://localhost:3022/chat/${conversationName}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
-      const chatObjectArray = response.data.answer.data;
-      setSelectedChat(chatObjectArray);
+      const conversationName =
+        selectedEntity.conversationName || selectedEntity.username;
+      console.log("conversationName: ", conversationName);
+
+      if (conversationName) {
+        const response = await axios.get(
+          `http://localhost:3022/chat/${conversationName}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
+        const chatObjectArray = response.data.answer.data;
+        setSelectedChat(chatObjectArray);
+      }
     } catch (error) {
       console.log("Error during fetching chat: " + error);
     }

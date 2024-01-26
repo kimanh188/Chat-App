@@ -1,4 +1,7 @@
-export function SearchResultComponent({ searchResults }) {
+export function SearchResultComponent({
+  searchResults,
+  chooseAConversationHandler,
+}) {
   return (
     <>
       {searchResults && (
@@ -10,7 +13,10 @@ export function SearchResultComponent({ searchResults }) {
                 alt="user avatar"
                 className="rounded-full w-10 h-10 object-cover"
               />
-              <button className="pl-2 rounded-md hover:bg-yellow-300 focus:text-indigo-900 focus:bg-yellow-100 text-left border-none w-full">
+              <button
+                className="pl-2 rounded-md hover:bg-yellow-300 focus:text-indigo-900 focus:bg-yellow-100 text-left border-none w-full"
+                onClick={(event) => chooseAConversationHandler(event, result)}
+              >
                 {result.username}
               </button>
             </div>
