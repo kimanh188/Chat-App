@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { ChatListComponent } from "./ChatList/chatListComponent.jsx";
 import { ProfileButtonComponent } from "./ProfileImgButton/profileButtonComponent.jsx";
-import { SearchResultComponent } from "./SearchBar/searchComponent.jsx";
+import { SearchResultComponent } from "./SearchBar/searchResultComponent.jsx";
 
 export function ChatDashboardComponent({
   token,
@@ -31,6 +31,7 @@ export function ChatDashboardComponent({
           withCredentials: true,
         });
         setSearchResults(response.data.answer.data);
+        console.log("Search results: ", searchResults);
       } else {
         const response = await axios.post(
           "http://localhost:3022/search",

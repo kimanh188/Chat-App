@@ -3,7 +3,12 @@ import { errorCreator } from "../lib/errorCreator.js";
 
 export async function showAllUsers(req, res, next) {
   try {
-    const allUsers = await UserModel.find({});
+    const thisUsername = req.user.username;
+    //console.log(thisUsername);
+    const allUsers = await UserModel.find({
+      username: { $ne: thisUsername },
+    });
+    //console.log(allUsers);
 
     if (!allUsers || allUsers.length === 0) {
       return res.status(400).json({
@@ -14,13 +19,11 @@ export async function showAllUsers(req, res, next) {
       });
     }
 
-    const allUsernames = allUsers.map((user) => user.username);
-
     res.status(200).json({
       answer: {
         code: 200,
         message: "Users found",
-        data: allUsernames,
+        data: allUsers,
       },
     });
   } catch (error) {
