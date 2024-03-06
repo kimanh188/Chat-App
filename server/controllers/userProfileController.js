@@ -26,6 +26,7 @@ export async function changePasswordPutController(req, res, next) {
     const { currentPassword, newPassword } = req.body;
 
     const isPasswordCorrect = await user.auth(currentPassword);
+
     if (!isPasswordCorrect) {
       return res.status(401).json({
         answer: {
@@ -33,16 +34,35 @@ export async function changePasswordPutController(req, res, next) {
           message: "Current password incorrect",
         },
       });
-    } else {
-      user.password = newPassword;
-      await user.save();
-
-      res.status(200).json({
+    } else if (currentPassword === newPassword) {
+      return res.status(400).json({
         answer: {
-          code: 200,
-          message: "Password changed",
+          code: 400,
+          message: "New password must be different from current password",
         },
       });
+    } else {
+      const passwordValidation = /^(?=.*[A-Z]).{8,}$/;
+
+      if (!passwordValidation.test(newPassword)) {
+        return res.status(400).json({
+          answer: {
+            code: 400,
+            message:
+              "Password must be at least 8 characters long and contain at least one uppercase letter",
+          },
+        });
+      } else {
+        user.password = newPassword;
+        await user.save();
+
+        res.status(200).json({
+          answer: {
+            code: 200,
+            message: "Password changed",
+          },
+        });
+      }
     }
   } catch (error) {
     console.log(error);

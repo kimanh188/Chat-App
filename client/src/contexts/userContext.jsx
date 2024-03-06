@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
 export const UserContext = createContext();
 
@@ -7,6 +8,22 @@ export const UserContextProvider = ({ children }) => {
   const [loggedInUsername, setLoggedInUsername] = useState(null);
   const [loggedInId, setLoggedInId] = useState(null);
   const [loggedInProfileImg, setLoggedInProfileImg] = useState(null);
+
+  const [token, setToken] = useState("");
+
+  const retrieveToken = () => {
+    try {
+      const storedToken = Cookies.get("jwt");
+      //console.log("1. Stored token: ", storedToken);
+      setToken(storedToken);
+    } catch (error) {
+      console.log("Error retrieving token: ", error);
+    }
+  };
+
+  useEffect(() => {
+    retrieveToken();
+  }, []);
 
   return (
     <UserContext.Provider
@@ -19,6 +36,7 @@ export const UserContextProvider = ({ children }) => {
         setLoggedInId,
         loggedInProfileImg,
         setLoggedInProfileImg,
+        token,
       }}
     >
       {children}

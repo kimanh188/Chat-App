@@ -1,28 +1,15 @@
 import { useState, useEffect, useContext } from "react";
-import Cookies from "js-cookie";
 import axios from "axios";
 import { ChatBoxComponent } from "../../components/Chat/ChatBox/chatBoxComponent.jsx";
 import { UserContext } from "../../contexts/userContext.jsx";
 import { ChatDashboardComponent } from "../../components/Chat/ChatDashboard/chatDashboardComponent.jsx";
 
 export function ChatPage() {
-  const [token, setToken] = useState("");
-
-  const { loggedInUsername } = useContext(UserContext);
+  const { loggedInUsername, token } = useContext(UserContext);
   const storedUsername = localStorage.getItem("loggedInUsername") || "";
 
   const [conversations, setConversations] = useState([]);
   const [selectedChat, setSelectedChat] = useState([]);
-
-  const retrieveToken = () => {
-    try {
-      const storedToken = Cookies.get("jwt");
-      //console.log("1. Stored token: ", storedToken);
-      setToken(storedToken);
-    } catch (error) {
-      console.log("Error retrieving token: ", error);
-    }
-  };
 
   const getConversations = async () => {
     try {
@@ -74,7 +61,6 @@ export function ChatPage() {
   }, [loggedInUsername]);
 
   useEffect(() => {
-    retrieveToken();
     getConversations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

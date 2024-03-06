@@ -1,7 +1,11 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+
 import { UserContext } from "../../contexts/userContext.jsx";
+import { Button } from "../../components/Profile/Buttons/buttonComponent.jsx";
+import { PasswordForm } from "../../components/Profile/PasswordForm/passwordForm.jsx";
+
 import EditIcon from "../../assets/edit.svg";
 import KeyIcon from "../../assets/key.svg";
 import InfoIcon from "../../assets/info.svg";
@@ -9,48 +13,36 @@ import UpdateIcon from "../../assets/update.svg";
 import LogoutIcon from "../../assets/logout.svg";
 
 export function UserProfilePage() {
-  //const [token, setToken] = useState("");
-
-  const { loggedInUsername, loggedInEmail, loggedInId, loggedInProfileImg } =
-    useContext(UserContext);
+  const {
+    loggedInUsername,
+    loggedInEmail,
+    loggedInId,
+    loggedInProfileImg,
+    token,
+  } = useContext(UserContext);
   const storedUsername = localStorage.getItem("loggedInUsername") || "";
   const storedEmail = localStorage.getItem("loggedInEmail") || "";
   const storedId = localStorage.getItem("loggedInId") || "";
   const storedProfileImg = localStorage.getItem("loggedInProfileImg") || "";
+
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
 
   const profileImgPath =
     loggedInProfileImg || storedProfileImg
       ? `http://localhost:3022/${loggedInProfileImg || storedProfileImg}`
       : "src/assets/default-user-avatar.svg";
 
-  //const [profile, setProfile] = useState({});
+  const editProfileClick = () => {};
 
-  /*  const retrieveToken = () => {
-    try {
-      const storedToken = Cookies.get("jwt");
-      setToken(storedToken);
-    } catch (error) {
-      console.log("Error retrieving token: ", error);
-    }
-  }; */
+  const changePasswordClick = () => {
+    setShowPasswordChange(true);
+  };
 
-  /* const getProfile = async () => {
-    try {
-      const response = await axios.get("http://localhost:3022/user/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      });
-     
-      setProfile(response.data.answer.data);
-      console.log("Profile: ", profile);
-    } catch (error) {
-      console.log("Error fetching user's profile: ", error);
-    }
-  }; */
+  const showAppInfoClick = () => {};
 
-  const logOutHandler = async () => {
+  const updateAppClick = () => {};
+
+  const logOutClick = async () => {
     try {
       const response = await axios.post("http://localhost:3022/user/logout", {
         headers: {
@@ -94,88 +86,61 @@ export function UserProfilePage() {
   }, []);
 
   return (
-    <div className="h-screen p-5 mx-auto max-w-4xl">
-      <h1 className="text-2xl pb-5">Setting</h1>
+    <div className="h-screen p-5 bg-purple-500 relative">
+      <h1 className="text-4xl pb-5 text-white">Setting</h1>
 
-      <div className="flex flex-col items-center justify-center ">
+      <div className="flex flex-col items-center justify-center">
         <div className="relative max-w-max">
           <img
-            className="rounded-full w-36 h-36 border-8 p-1 border-purple-600"
+            className="rounded-full w-36 h-36 border-8 p-1 border-yellow-200"
             src={profileImgPath}
             alt="User Avatar"
           />
           <button>
             <img
-              className="rounded-full border border-white bg-purple-300 p-2 absolute bottom-5 right-0"
+              className="rounded-full border border-white bg-yellow-500 p-2 absolute bottom-5 right-0"
               src={EditIcon}
               alt="edit icon"
             />
           </button>
         </div>
-        <h2 className="pt-1 pb-8 text-2xl font-bold">
+        <h2 className="pt-1 pb-8 text-2xl font-bold text-yellow-100">
           {loggedInUsername || storedUsername}
         </h2>
 
         <div className="flex flex-col gap-4 items-start ">
-          <button className="flex items-center justify-center gap-2 ">
-            <img
-              className="rounded-full border border-white bg-purple-400 p-2 bottom-5 right-0"
-              src={EditIcon}
-              alt="edit icon"
-            />
-            <h6 className="font-semibold text-xl hover:text-indigo-600 ">
-              Edit profile
-            </h6>
-          </button>
+          <Button
+            onClick={editProfileClick}
+            imgSrc={EditIcon}
+            text="Edit Profile"
+          />
 
-          <button className="flex items-center justify-center gap-2">
-            <img
-              className="rounded-full border border-white bg-purple-400 p-2 bottom-5 right-0"
-              src={KeyIcon}
-              alt="key icon"
-            />
-            <h6 className="font-semibold text-xl hover:text-indigo-600 ">
-              Change password
-            </h6>
-          </button>
+          <Button
+            onClick={changePasswordClick}
+            imgSrc={KeyIcon}
+            text="Change password"
+          />
 
-          <button className="flex items-center justify-center gap-2">
-            <img
-              className="rounded-full border border-white bg-purple-400 p-2 bottom-5 right-0"
-              src={InfoIcon}
-              alt="info icon"
-            />
-            <h6 className="font-semibold text-xl hover:text-indigo-600 ">
-              Information
-            </h6>
-          </button>
+          <Button
+            onClick={showAppInfoClick}
+            imgSrc={InfoIcon}
+            text="Information"
+          />
 
-          <button className="flex items-center justify-center gap-2">
-            <img
-              className="rounded-full border border-white bg-purple-400 p-2 bottom-5 right-0"
-              src={UpdateIcon}
-              alt="update icon"
-            />
-            <h6 className="font-semibold text-xl hover:text-indigo-600 ">
-              Update
-            </h6>
-          </button>
+          <Button onClick={updateAppClick} imgSrc={UpdateIcon} text="Update" />
 
-          <button
-            className="flex items-center justify-center gap-2"
-            onClick={logOutHandler}
-          >
-            <img
-              className="rounded-full border border-white bg-purple-400 p-2 bottom-5 right-0"
-              src={LogoutIcon}
-              alt="logout icon"
-            />
-            <h6 className="font-semibold text-xl hover:text-indigo-600 ">
-              Logout
-            </h6>
-          </button>
+          <Button onClick={logOutClick} imgSrc={LogoutIcon} text="Logout" />
         </div>
       </div>
+
+      {showPasswordChange && (
+        <>
+          <div className="fixed inset-0 bg-gray-900 opacity-60 flex items-center justify-center"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6/12 bg-yellow-100 rounded-md p-3">
+            {<PasswordForm setShowPasswordChange={setShowPasswordChange} />}
+          </div>
+        </>
+      )}
     </div>
   );
 }
