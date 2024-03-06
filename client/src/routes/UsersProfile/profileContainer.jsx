@@ -79,12 +79,6 @@ export function UserProfilePage() {
     }
   }, [loggedInUsername, loggedInEmail, loggedInId, loggedInProfileImg]);
 
-  useEffect(() => {
-    //retrieveToken();
-    //getProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div className="h-screen p-5 bg-purple-500 relative">
       <h1 className="text-4xl pb-5 text-white">Setting</h1>
