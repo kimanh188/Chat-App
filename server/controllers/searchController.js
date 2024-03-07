@@ -35,10 +35,12 @@ export async function showAllUsers(req, res, next) {
 
 export async function searchForUsers(req, res, next) {
   try {
+    const thisUser = req.user;
     const { searchInput } = req.body;
 
     //find users whose username contains searchedUser
     const matchedUsers = await UserModel.find({
+      _id: { $ne: thisUser._id },
       username: { $regex: searchInput, $options: "i" },
     });
 
@@ -46,18 +48,23 @@ export async function searchForUsers(req, res, next) {
       return res.status(404).json({
         answer: {
           code: 404,
-          message: "User not found",
+          message: "Username not found",
         },
       });
     }
 
-    const matchedUsernames = matchedUsers.map((user) => user.username);
+    const matchedUsersArray = matchedUsers.map((user) => {
+      return {
+        username: user.username,
+        profileImg: user.profileImg,
+      };
+    });
 
     res.status(200).json({
       answer: {
         code: 200,
         message: "User found",
-        data: matchedUsernames,
+        data: matchedUsersArray,
       },
     });
   } catch (error) {

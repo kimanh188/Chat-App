@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { ChatListComponent } from "./ChatList/chatListComponent.jsx";
 import { ProfileButtonComponent } from "./ProfileImgButton/profileButtonComponent.jsx";
@@ -12,7 +12,9 @@ export function ChatDashboardComponent({
 }) {
   const [showChatList, setShowChatList] = useState(true);
   const [showCancelBtn, setShowCancelBtn] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [error, setError] = useState("");
 
   const focusHandler = () => {
     setShowChatList(false);
@@ -21,6 +23,7 @@ export function ChatDashboardComponent({
 
   const inputChangeHandler = async (event) => {
     const input = event.target.value;
+    setSearchInput(input);
 
     try {
       if (input.length === 0) {
@@ -45,9 +48,13 @@ export function ChatDashboardComponent({
             withCredentials: true,
           }
         );
+        console.log("Search results: ", response.data.answer.data);
         setSearchResults(response.data.answer.data);
       }
     } catch (error) {
+      if (error.response) {
+        setError(error.response.data.answer.message);
+      }
       console.log("Error searching: ", error);
     }
   };
@@ -55,7 +62,13 @@ export function ChatDashboardComponent({
   const cancelHandler = () => {
     setShowChatList(true);
     setShowCancelBtn(false);
+    setSearchInput("");
   };
+
+  //update the error message when the search input changes
+  useEffect(() => {
+    setError("");
+  }, [searchInput]);
 
   return (
     <div className="w-1/3 h-screen bg-purple-500 px-5 text-gray-900 ">
@@ -72,8 +85,10 @@ export function ChatDashboardComponent({
           className="bg-white mt-3 mr-1 p-2 rounded-md w-full"
           type="text"
           placeholder="Search for a friend..."
+          value={searchInput}
           onFocus={focusHandler}
           onClick={inputChangeHandler}
+          onChange={inputChangeHandler}
         />
         {showCancelBtn && (
           <button
@@ -94,6 +109,7 @@ export function ChatDashboardComponent({
         <SearchResultComponent
           searchResults={searchResults}
           chooseAConversationHandler={chooseAConversationHandler}
+          error={error}
         />
       )}
     </div>
