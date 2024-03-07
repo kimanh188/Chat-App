@@ -8,7 +8,7 @@ export const jwtCreator = (req, res, next) => {
   };
 
   const secretKey = process.env.SECURITY_KEY;
-  const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+  const token = jwt.sign(payload, secretKey, { expiresIn: "24h" });
 
   res.cookie("jwt", token, {
     httpOnly: false,

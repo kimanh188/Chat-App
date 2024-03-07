@@ -32,9 +32,6 @@ export function PasswordForm({ setShowPasswordChange }) {
       if (response.status === 200) {
         console.log("Response from change password: ", response.data.answer);
         setMessage(response.data.answer.message);
-        setTimeout(() => {
-          setShowPasswordChange(false);
-        }, 2000);
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -57,6 +54,7 @@ export function PasswordForm({ setShowPasswordChange }) {
       changePassword={changePassword}
       cancelChange={cancelChange}
       message={message}
+      setShowPasswordChange={setShowPasswordChange}
     />
   );
 }

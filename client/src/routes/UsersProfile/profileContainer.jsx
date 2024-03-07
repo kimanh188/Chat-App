@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { UserContext } from "../../contexts/userContext.jsx";
 import { Button } from "../../components/Profile/Buttons/buttonComponent.jsx";
 import { PasswordForm } from "../../components/Profile/PasswordForm/passwordForm.jsx";
+import { ProfileImgUpload } from "../../components/Profile/ProfileImgUploadForm/profileImgUploadComponent.jsx";
 
 import EditIcon from "../../assets/edit.svg";
 import KeyIcon from "../../assets/key.svg";
@@ -13,24 +14,22 @@ import UpdateIcon from "../../assets/update.svg";
 import LogoutIcon from "../../assets/logout.svg";
 
 export function UserProfilePage() {
-  const {
-    loggedInUsername,
-    loggedInEmail,
-    loggedInId,
-    loggedInProfileImg,
-    token,
-  } = useContext(UserContext);
+  const { loggedInUsername, loggedInEmail, loggedInId, loggedInProfileImg } =
+    useContext(UserContext);
   const storedUsername = localStorage.getItem("loggedInUsername") || "";
-  const storedEmail = localStorage.getItem("loggedInEmail") || "";
-  const storedId = localStorage.getItem("loggedInId") || "";
   const storedProfileImg = localStorage.getItem("loggedInProfileImg") || "";
 
   const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const [showImageUpload, setShowImageUpload] = useState(false);
 
   const profileImgPath =
     loggedInProfileImg || storedProfileImg
       ? `http://localhost:3022/${loggedInProfileImg || storedProfileImg}`
       : "src/assets/default-user-avatar.svg";
+
+  const changeProfileImgClick = () => {
+    setShowImageUpload(true);
+  };
 
   const editProfileClick = () => {};
 
@@ -90,7 +89,7 @@ export function UserProfilePage() {
             src={profileImgPath}
             alt="User Avatar"
           />
-          <button>
+          <button title="Change profile image" onClick={changeProfileImgClick}>
             <img
               className="rounded-full border border-white bg-yellow-500 p-2 absolute bottom-5 right-0"
               src={EditIcon}
@@ -132,6 +131,15 @@ export function UserProfilePage() {
           <div className="fixed inset-0 bg-gray-900 opacity-60 flex items-center justify-center"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6/12 bg-yellow-100 rounded-md p-3">
             {<PasswordForm setShowPasswordChange={setShowPasswordChange} />}
+          </div>
+        </>
+      )}
+
+      {showImageUpload && (
+        <>
+          <div className="fixed inset-0 bg-gray-900 opacity-60 flex items-center justify-center"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6/12 bg-yellow-100 rounded-md p-3">
+            <ProfileImgUpload setShowImageUpload={setShowImageUpload} />
           </div>
         </>
       )}

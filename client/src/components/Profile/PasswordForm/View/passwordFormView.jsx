@@ -1,16 +1,18 @@
+import { CloseWindowButton } from "../../Buttons/closeWindowButtonComponent.jsx";
+
 export function PasswordFormView({
   setCurrentPasswordInput,
   setNewPasswordInput,
   changePassword,
   cancelChange,
   message,
+  setShowPasswordChange,
 }) {
   return (
-    <form type="submit" className="flex flex-col gap-2">
+    <form type="submit" className="flex flex-col gap-2 relative">
+      <h2 className="text-2xl font-bold text-center">Change Password</h2>
       <div className="flex flex-col">
-        <label className="" htmlFor="current-password">
-          Current Password :
-        </label>
+        <label htmlFor="current-password">Current Password :</label>
         <input
           className="ml-2 pl-2 p-1 rounded-md"
           type="text"
@@ -57,6 +59,7 @@ export function PasswordFormView({
       >
         {message}
       </p>
+      <CloseWindowButton setWindow={setShowPasswordChange} />
     </form>
   );
 }

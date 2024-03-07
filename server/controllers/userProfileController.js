@@ -76,12 +76,22 @@ export async function uploadProfileImgPostController(req, res, next) {
     const file = req.file;
 
     if (!file) {
-      return res.status(400).json({ message: "No file uploaded" });
+      return res.status(400).json({
+        answer: {
+          code: 400,
+          message: "No file uploaded",
+        },
+      });
     }
 
     if (user.profileImg) {
       const prevImgPath = user.profileImg;
-      await fs.unlink(prevImgPath);
+
+      try {
+        await fs.unlink(prevImgPath);
+      } catch (unlinkError) {
+        console.log("Error deleting previous image: ", unlinkError);
+      }
     }
 
     user.profileImg = file.path;
