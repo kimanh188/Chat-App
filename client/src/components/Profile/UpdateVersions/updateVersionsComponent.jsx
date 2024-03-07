@@ -14,6 +14,7 @@ export function UpdateVersions({ setShowUpdateVersions }) {
         <li>Add location and birthday to user profile</li>
         <li>Update styles for unread messages</li>
         <li>Add feature to show other users&apos; profile</li>
+        <li>Add feature to delete a conversation</li>
       </ul>
 
       <CloseWindowButton setWindow={setShowUpdateVersions} />

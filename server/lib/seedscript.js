@@ -43,13 +43,15 @@ const getRandomUser = async () => {
 const createMessages = async (docsToCreate) => {
   try {
     for (let i = 0; i < docsToCreate; i++) {
-      let sender = await getRandomUser();
+      let sender = "Milo";
+      //await getRandomUser();
 
-      let recipient = await getRandomUser();
+      let recipient = "Marina";
+      //await getRandomUser();
 
-      while (sender === recipient) {
+      /*  while (sender === recipient) {
         recipient = await getRandomUser();
-      }
+      } */
 
       await MessageModel.create({
         sender: sender,
@@ -66,7 +68,7 @@ const createMessages = async (docsToCreate) => {
 };
 
 //await createUsers(5);
-await createMessages(20);
+await createMessages(2);
 
 /* const deleteAllMessages = async () => {
   try {

@@ -21,7 +21,7 @@ export function ChatPage() {
         },
         withCredentials: true,
       });
-      console.log("2. Response getConversations: ", response.data.answer.data);
+      //console.log("2. Response getConversations: ", response.data.answer.data);
       setConversations(response.data.answer.data);
     } catch (error) {
       console.log("Error fetching conversations: ", error);
@@ -35,7 +35,7 @@ export function ChatPage() {
 
       const conversationName =
         selectedEntity.conversationName || selectedEntity.username;
-      console.log("conversationName: ", conversationName);
+      //console.log("conversationName: ", conversationName);
 
       if (conversationName) {
         const response = await axios.get(

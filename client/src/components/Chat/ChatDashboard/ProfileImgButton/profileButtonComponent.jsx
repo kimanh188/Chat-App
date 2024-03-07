@@ -14,8 +14,6 @@ export function ProfileButtonComponent() {
     loggedInProfileImg || storedProfileImg
   }`;
 
-  //console.log("Profile Image Path:", profileImgPath);
-
   const profileRouteHandler = async () => {
     navigate("/profile");
   };

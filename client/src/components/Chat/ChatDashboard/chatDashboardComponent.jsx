@@ -35,7 +35,7 @@ export function ChatDashboardComponent({
           withCredentials: true,
         });
         setSearchResults(response.data.answer.data);
-        console.log("Search results: ", searchResults);
+        //console.log("Search results: ", searchResults);
       } else {
         const response = await axios.post(
           "http://localhost:3022/search",
@@ -49,7 +49,7 @@ export function ChatDashboardComponent({
             withCredentials: true,
           }
         );
-        console.log("Search results: ", response.data.answer.data);
+        //console.log("Search results: ", response.data.answer.data);
         setSearchResults(response.data.answer.data);
       }
     } catch (error) {
