@@ -51,10 +51,11 @@ export function ChatBoxComponent({ selectedChat, currentUser }) {
     return null;
   }
   return (
-    <div className="w-2/3 h-screen bg-purple-800  text-gray-900">
+    <div className="w-2/3 h-screen bg-purple-800  text-gray-900 relative">
       <div className="text-xl px-5 py-1 bg-yellow-100 w-full">
         <button>{otherUsername}</button>
       </div>
+
       <div className="px-5">
         {selectedChat.map((message, index) => (
           <div className="my-4 w-full flex items-center" key={index}>
@@ -79,6 +80,22 @@ export function ChatBoxComponent({ selectedChat, currentUser }) {
             </span>
           </div>
         ))}
+      </div>
+
+      <div className="absolute bottom-0 w-full">
+        <form action="" className="flex gap-2 px-5 justify-center items-center">
+          <input
+            type="text"
+            className="w-4/5 h-14 p-2 rounded-md bg-white resize-none"
+            placeholder="Type a message"
+          ></input>
+          <button
+            type="submit"
+            className=" w-1/6 h-12 bg-yellow-400 p-2 rounded-md"
+          >
+            Send
+          </button>
+        </form>
       </div>
     </div>
   );

@@ -13,7 +13,9 @@ export function UpdateVersions({ setShowUpdateVersions }) {
       <ul className="ml-6 list-disc">
         <li>Add location and birthday to user profile</li>
         <li>Update styles for unread messages</li>
-        <li>Add feature to show other users&apos; profile</li>
+        <li>
+          Show when the user is typing a message and when the user is online
+        </li>
         <li>Add feature to delete a conversation</li>
       </ul>
 
