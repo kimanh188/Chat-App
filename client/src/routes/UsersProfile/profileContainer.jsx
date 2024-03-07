@@ -6,6 +6,9 @@ import { UserContext } from "../../contexts/userContext.jsx";
 import { Button } from "../../components/Profile/Buttons/buttonComponent.jsx";
 import { PasswordForm } from "../../components/Profile/PasswordForm/passwordForm.jsx";
 import { ProfileImgUpload } from "../../components/Profile/ProfileImgUploadForm/profileImgUploadComponent.jsx";
+import { ProfileInfo } from "../../components/Profile/ProfileInfo/profileInfoComponent.jsx";
+import { AppInfo } from "../../components/Profile/AppInfo/appInfoComponent.jsx";
+import { UpdateVersions } from "../../components/Profile/UpdateVersions/updateVersionsComponent.jsx";
 
 import EditIcon from "../../assets/edit.svg";
 import KeyIcon from "../../assets/key.svg";
@@ -20,7 +23,10 @@ export function UserProfilePage() {
   const storedProfileImg = localStorage.getItem("loggedInProfileImg") || "";
 
   const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const [showProfileInfo, setShowProfileInfo] = useState(false);
   const [showImageUpload, setShowImageUpload] = useState(false);
+  const [showAppInfo, setShowAppInfo] = useState(false);
+  const [showUpdateVersions, setShowUpdateVersions] = useState(false);
 
   const profileImgPath =
     loggedInProfileImg || storedProfileImg
@@ -31,15 +37,21 @@ export function UserProfilePage() {
     setShowImageUpload(true);
   };
 
-  const editProfileClick = () => {};
+  const editProfileClick = () => {
+    setShowProfileInfo(true);
+  };
 
   const changePasswordClick = () => {
     setShowPasswordChange(true);
   };
 
-  const showAppInfoClick = () => {};
+  const showAppInfoClick = () => {
+    setShowAppInfo(true);
+  };
 
-  const updateAppClick = () => {};
+  const updateAppClick = () => {
+    setShowUpdateVersions(true);
+  };
 
   const logOutClick = async () => {
     try {
@@ -91,7 +103,7 @@ export function UserProfilePage() {
           />
           <button title="Change profile image" onClick={changeProfileImgClick}>
             <img
-              className="rounded-full border border-white bg-yellow-500 p-2 absolute bottom-5 right-0"
+              className="rounded-full border border-white bg-yellow-500 p-2 absolute bottom-5 right-0 hover:bg-yellow-00 transition-all duration-300"
               src={EditIcon}
               alt="edit icon"
             />
@@ -129,8 +141,20 @@ export function UserProfilePage() {
       {showPasswordChange && (
         <>
           <div className="fixed inset-0 bg-gray-900 opacity-60 flex items-center justify-center"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6/12 bg-yellow-100 rounded-md p-3">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6/12 bg-white rounded-md p-3">
             {<PasswordForm setShowPasswordChange={setShowPasswordChange} />}
+          </div>
+        </>
+      )}
+
+      {showProfileInfo && (
+        <>
+          <div className="fixed inset-0 bg-gray-900 opacity-60 flex items-center justify-center"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6/12 bg-white rounded-md p-3">
+            <ProfileInfo
+              profileImgPath={profileImgPath}
+              setShowProfileInfo={setShowProfileInfo}
+            />
           </div>
         </>
       )}
@@ -138,8 +162,26 @@ export function UserProfilePage() {
       {showImageUpload && (
         <>
           <div className="fixed inset-0 bg-gray-900 opacity-60 flex items-center justify-center"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6/12 bg-yellow-100 rounded-md p-3">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6/12 bg-white rounded-md p-3">
             <ProfileImgUpload setShowImageUpload={setShowImageUpload} />
+          </div>
+        </>
+      )}
+
+      {showAppInfo && (
+        <>
+          <div className="fixed inset-0 bg-gray-900 opacity-60 flex items-center justify-center"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6/12 bg-white rounded-md p-3">
+            <AppInfo setShowAppInfo={setShowAppInfo} />
+          </div>
+        </>
+      )}
+
+      {showUpdateVersions && (
+        <>
+          <div className="fixed inset-0 bg-gray-900 opacity-60 flex items-center justify-center"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6/12 bg-white rounded-md p-3">
+            <UpdateVersions setShowUpdateVersions={setShowUpdateVersions} />
           </div>
         </>
       )}

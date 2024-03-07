@@ -10,11 +10,11 @@ export function PasswordFormView({
 }) {
   return (
     <form type="submit" className="flex flex-col gap-2 relative">
-      <h2 className="text-2xl font-bold text-center">Change Password</h2>
+      <h2 className="text-2xl font-bold text-center mb-2">Change Password</h2>
       <div className="flex flex-col">
         <label htmlFor="current-password">Current Password :</label>
         <input
-          className="ml-2 pl-2 p-1 rounded-md"
+          className="mx-2 pl-2 p-1 rounded-md bg-yellow-100"
           type="text"
           onChange={(e) => setCurrentPasswordInput(e.target.value)}
           id="current-password"
@@ -27,7 +27,7 @@ export function PasswordFormView({
           New Password :
         </label>
         <input
-          className="ml-2 pl-2 p-1 rounded-md"
+          className="mx-2 pl-2 p-1 rounded-md bg-yellow-100"
           type="text"
           onChange={(e) => setNewPasswordInput(e.target.value)}
           id="new-password"
