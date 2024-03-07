@@ -1,6 +1,7 @@
 export function ChatListComponent({
   conversations,
   chooseAConversationHandler,
+  selectedConversation,
 }) {
   return (
     <div className="pt-5">
@@ -14,7 +15,11 @@ export function ChatListComponent({
           {conversations.map((conversation, index) => (
             <button
               key={index}
-              className="p-2 mb-4 rounded-md bg-yellow-500 hover:bg-yellow-300 focus:text-indigo-900 focus:bg-yellow-100 text-left border-none w-full"
+              className={`p-2 mb-4 rounded-md ${
+                selectedConversation === conversation
+                  ? "bg-yellow-100"
+                  : "bg-yellow-500 hover:bg-yellow-300"
+              } focus:text-indigo-900 focus:bg-yellow-100 text-left border-none w-full `}
               onClick={(event) =>
                 chooseAConversationHandler(event, conversation)
               }

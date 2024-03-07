@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 export function SearchResultComponent({
   searchResults,
   chooseAConversationHandler,

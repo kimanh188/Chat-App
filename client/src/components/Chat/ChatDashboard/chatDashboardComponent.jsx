@@ -9,6 +9,7 @@ export function ChatDashboardComponent({
   currentUser,
   conversations,
   chooseAConversationHandler,
+  selectedConversation,
 }) {
   const [showChatList, setShowChatList] = useState(true);
   const [showCancelBtn, setShowCancelBtn] = useState(false);
@@ -104,6 +105,7 @@ export function ChatDashboardComponent({
         <ChatListComponent
           conversations={conversations}
           chooseAConversationHandler={chooseAConversationHandler}
+          selectedConversation={selectedConversation}
         />
       ) : (
         <SearchResultComponent

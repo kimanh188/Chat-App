@@ -1,4 +1,5 @@
 export function ChatBoxComponent({ selectedChat, currentUser }) {
+  console.log(selectedChat);
   return (
     <div className="w-2/3 h-screen bg-purple-800 px-5 text-gray-900">
       <div>

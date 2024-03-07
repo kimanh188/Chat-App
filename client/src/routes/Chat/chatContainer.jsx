@@ -9,6 +9,7 @@ export function ChatPage() {
   const storedUsername = localStorage.getItem("loggedInUsername") || "";
 
   const [conversations, setConversations] = useState([]);
+  const [selectedConversation, setSelectedConversation] = useState(null);
   const [selectedChat, setSelectedChat] = useState([]);
 
   const getConversations = async () => {
@@ -20,7 +21,7 @@ export function ChatPage() {
         },
         withCredentials: true,
       });
-      //console.log("2. Response getConversations: ", response.data.answer.data);
+      console.log("2. Response getConversations: ", response.data.answer.data);
       setConversations(response.data.answer.data);
     } catch (error) {
       console.log("Error fetching conversations: ", error);
@@ -48,6 +49,7 @@ export function ChatPage() {
         );
         const chatObjectArray = response.data.answer.data;
         setSelectedChat(chatObjectArray);
+        setSelectedConversation(selectedEntity);
       }
     } catch (error) {
       console.log("Error during fetching chat: " + error);
@@ -72,6 +74,7 @@ export function ChatPage() {
         currentUser={loggedInUsername || storedUsername}
         conversations={conversations}
         chooseAConversationHandler={chooseAConversationHandler}
+        selectedConversation={selectedConversation}
       />
 
       <ChatBoxComponent
