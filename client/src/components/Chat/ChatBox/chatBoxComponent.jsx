@@ -2,10 +2,65 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../contexts/userContext.jsx";
 
-export function ChatBoxComponent({ selectedChat, currentUser }) {
+import io from "socket.io-client";
+
+export function ChatBoxComponent({
+  selectedChat,
+  //updateSelectedChat,
+  currentUser,
+  selectedConversation,
+}) {
   const { token } = useContext(UserContext);
+
   const [otherUsername, setOtherUsername] = useState("");
   const [otherUserProfileImg, setOtherUserProfileImg] = useState(null);
+
+  const [messages, setMessages] = useState("");
+  const [newMessage, setNewMessage] = useState("");
+
+  /* 
+  const conversationKey = selectedConversation.conversationKey; */
+
+  const typingHandler = (event) => {
+    setNewMessage(event.target.value);
+    //typing indicator to other user
+  };
+
+  const sendMessage = async (event) => {
+    event.preventDefault();
+    console.log("newMessage: ", newMessage);
+
+    if (newMessage) {
+      try {
+        setNewMessage("");
+
+        const response = await axios.post(
+          "http://localhost:3022/chat",
+          {
+            message: newMessage,
+            sender: currentUser,
+            recipient: otherUsername,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
+
+        console.log("Response sendMessage: ", response);
+
+        setMessages([...messages, response.data.answer.data]);
+        console.log("Messages: ", messages);
+      } catch (error) {
+        console.log("Error sending message: ", error);
+      }
+    }
+  };
+
+  //fetch selected chat when changes
 
   const responseFetchOtherUser = async (otherUsername) => {
     try {
@@ -45,11 +100,13 @@ export function ChatBoxComponent({ selectedChat, currentUser }) {
       setOtherUsername(otherUsername);
       responseFetchOtherUser(otherUsername);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChat, currentUser]);
 
   if (!selectedChat.length) {
     return null;
   }
+
   return (
     <div className="w-2/3 h-screen bg-purple-800  text-gray-900 relative">
       <div className="text-xl px-5 py-1 bg-yellow-100 w-full">
@@ -88,10 +145,13 @@ export function ChatBoxComponent({ selectedChat, currentUser }) {
             type="text"
             className="w-4/5 h-14 p-2 rounded-md bg-white resize-none"
             placeholder="Type a message"
+            onChange={typingHandler}
+            value={newMessage}
           ></input>
           <button
             type="submit"
             className=" w-1/6 h-12 bg-yellow-400 p-2 rounded-md"
+            onClick={sendMessage}
           >
             Send
           </button>

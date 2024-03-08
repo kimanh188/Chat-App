@@ -28,6 +28,12 @@ export function ChatListComponent({
                 {conversation.conversationName}
               </h3>
               <div className="truncate text-indigo-900">
+                <span className="text-sm">
+                  {conversation.messages[0].sender !==
+                  conversation.conversationName
+                    ? "You: "
+                    : ""}
+                </span>
                 {conversation.messages[0].message}
               </div>
             </button>

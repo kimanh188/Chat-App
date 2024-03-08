@@ -35,7 +35,7 @@ export function ChatPage() {
 
       const conversationName =
         selectedEntity.conversationName || selectedEntity.username;
-      //console.log("conversationName: ", conversationName);
+      console.log("conversationName: ", conversationName);
 
       if (conversationName) {
         const response = await axios.get(
@@ -80,6 +80,7 @@ export function ChatPage() {
       <ChatBoxComponent
         selectedChat={selectedChat}
         currentUser={loggedInUsername || storedUsername}
+        selectedConversation={selectedConversation}
       />
     </div>
   );
