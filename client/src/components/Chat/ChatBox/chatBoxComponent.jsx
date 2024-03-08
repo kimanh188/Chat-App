@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../contexts/userContext.jsx";
 
-import io from "socket.io-client";
+//import io from "socket.io-client";
 
 export function ChatBoxComponent({
   selectedChat,
@@ -10,12 +10,13 @@ export function ChatBoxComponent({
   currentUser,
   selectedConversation,
 }) {
+  console.log("selectedChat: ", selectedChat);
   const { token } = useContext(UserContext);
 
   const [otherUsername, setOtherUsername] = useState("");
   const [otherUserProfileImg, setOtherUserProfileImg] = useState(null);
 
-  const [messages, setMessages] = useState("");
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
 
   /* 
@@ -23,7 +24,8 @@ export function ChatBoxComponent({
 
   const typingHandler = (event) => {
     setNewMessage(event.target.value);
-    //typing indicator to other user
+    //typing indicator to other user:
+    //socket.emit("typing", { sender: currentUser, recipient: otherUsername });
   };
 
   const sendMessage = async (event) => {
@@ -32,8 +34,6 @@ export function ChatBoxComponent({
 
     if (newMessage) {
       try {
-        setNewMessage("");
-
         const response = await axios.post(
           "http://localhost:3022/chat",
           {
@@ -50,10 +50,8 @@ export function ChatBoxComponent({
           }
         );
 
-        console.log("Response sendMessage: ", response);
-
         setMessages([...messages, response.data.answer.data]);
-        console.log("Messages: ", messages);
+        setNewMessage("");
       } catch (error) {
         console.log("Error sending message: ", error);
       }
@@ -62,6 +60,23 @@ export function ChatBoxComponent({
 
   //fetch selected chat when changes
 
+  //chat logic to check if same sender then only shows profile img of the other one with the last message
+  /*   const isSameSender = (selectedChat, message, index, currentUser) => {
+    return (
+      index < selectedChat.length - 1 &&
+      selectedChat[index + 1].sender !== message.sender &&
+      selectedChat[index].sender !== currentUser
+    );
+  };
+
+  const isLastMessage = (selectedChat, index, currentUser) => {
+    return (
+      index === selectedChat.length - 1 &&
+      selectedChat[selectedChat.length - 1].sender !== currentUser &&
+      selectedChat[selectedChat.length - 1].sender
+    );
+  };
+ */
   const responseFetchOtherUser = async (otherUsername) => {
     try {
       const response = await axios.post(
@@ -107,13 +122,23 @@ export function ChatBoxComponent({
     return null;
   }
 
+  const isSameSenderAsNext = (currentIndex) => {
+    if (currentIndex === selectedChat.length - 1) {
+      return false; // If it's the last message, always return false
+    }
+    return (
+      selectedChat[currentIndex].sender ===
+      selectedChat[currentIndex + 1].sender
+    );
+  };
+
   return (
     <div className="w-2/3 h-screen bg-purple-800  text-gray-900 relative">
       <div className="text-xl px-5 py-1 bg-yellow-100 w-full">
         <button>{otherUsername}</button>
       </div>
 
-      <div className="px-5">
+      {/*  <div className="px-5">
         {selectedChat.map((message, index) => (
           <div className="my-4 w-full flex items-center" key={index}>
             <span className="text-yellow-500 font-bold float-left mr-2">
@@ -130,8 +155,39 @@ export function ChatBoxComponent({
 
             <span
               className={`text-indigo-900 bg-white rounded-lg p-2 max-w-[70%] flex justify-between ${
-                message.sender === currentUser ? "ml-auto" : ""
+                message.sender === currentUser ? "ml-auto bg-pink-100" : ""
               }`}
+            >
+              {message.message}
+            </span>
+          </div>
+        ))}
+      </div> */}
+      <div className="px-5">
+        {selectedChat.map((message, index) => (
+          <div className="my-4 w-full flex items-center" key={index}>
+            {index === selectedChat.length - 1 || !isSameSenderAsNext(index) ? (
+              <span className="text-yellow-500 font-bold float-left mr-2">
+                {message.sender !== currentUser && (
+                  <img
+                    src={otherUserProfileImg}
+                    alt="profile"
+                    className="w-7 h-7 rounded-full"
+                  />
+                )}
+              </span>
+            ) : null}
+
+            <span
+              className={`text-indigo-900 bg-white rounded-lg py-1 px-2 max-w-[70%] flex justify-between ${
+                message.sender === currentUser ? "ml-auto bg-pink-100" : ""
+              }
+             ${
+               isSameSenderAsNext(index) && message.sender !== currentUser
+                 ? "ml-9"
+                 : ""
+             }
+              `}
             >
               {message.message}
             </span>
