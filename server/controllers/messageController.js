@@ -21,7 +21,6 @@ export async function getAllConversationsController(req, res, next) {
     }
 
     const otherUsernames = [];
-
     allMessages.forEach((message) => {
       const sender = message.sender;
       const recipient = message.recipient;
@@ -37,12 +36,13 @@ export async function getAllConversationsController(req, res, next) {
     });
 
     const conversationMap = new Map();
-
     allMessages.forEach((message) => {
       const theOtherUsername =
         message.sender === thisUserName ? message.recipient : message.sender;
 
-      const conversationKey = `${theOtherUsername}-${thisUserName}`;
+      const participantsSorted = [thisUserName, theOtherUsername].sort(); // Sort the participants alphabetically to avoid duplicates
+
+      const conversationKey = participantsSorted.join("-");
 
       if (!conversationMap.has(conversationKey)) {
         conversationMap.set(conversationKey, []);
@@ -56,7 +56,7 @@ export async function getAllConversationsController(req, res, next) {
         const participants = conversationKey.split("-");
         const interlocutor = participants.find((name) => name !== thisUserName);
         const conversationName = interlocutor || "Unknown";
-        return { conversationName, messages };
+        return { conversationKey, conversationName, messages };
       }
     );
 
@@ -137,5 +137,29 @@ export async function getAConversationController(req, res, next) {
   } catch (error) {
     console.log(error);
     next(errorCreator(500, "Internal server error"));
+  }
+}
+
+export async function createMessageController(req, res, next) {
+  try {
+    const { recipient, message } = req.body;
+    const sender = req.user.username;
+
+    const newMessage = await MessageModel.create({
+      sender,
+      recipient,
+      message,
+    });
+
+    res.status(201).json({
+      answer: {
+        code: 201,
+        message: "Message created",
+        data: newMessage,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    next(errorCreator(500, "Error creating message"));
   }
 }

@@ -14,6 +14,8 @@ import { messageRouter } from "./routes/messageRoute.js";
 import { searchRouter } from "./routes/searchRoute.js";
 config();
 
+import { Server } from "socket.io";
+
 mongoErrorListener();
 mongoConnectListener();
 mongoDisconnectListener();
@@ -54,6 +56,31 @@ app.use((error, req, res, next) => {
   });
 });
 
-app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
+});
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3023",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("a user connected " + socket.id);
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+
+  socket.on("setup", (userData) => {
+    socket.join(userData.conversationKey);
+    console.log("setup: ", userData);
+    socket.emit("connected");
+  });
+
+  socket.on("sendMessage", (data) => {
+    console.log("message: " + data.message);
+    socket.to(data.room).emit("receiveMessage", data);
+  });
 });
