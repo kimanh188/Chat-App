@@ -13,6 +13,7 @@ const messageSchema = new Schema(
       field: "username",
     },
     message: String,
+    conversationKey: String,
   },
   {
     timestamps: true,

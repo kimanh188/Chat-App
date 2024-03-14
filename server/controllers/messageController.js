@@ -145,10 +145,20 @@ export async function createMessageController(req, res, next) {
     const { recipient, message } = req.body;
     const sender = req.user.username;
 
+    if (!recipient || !message) {
+      return res.status(400).json({
+        answer: {
+          code: 400,
+          message: "Invalid data provided",
+        },
+      });
+    }
+
     const newMessage = await MessageModel.create({
       sender,
       recipient,
       message,
+      conversationKey: [sender, recipient].sort().join("-"),
     });
 
     res.status(201).json({

@@ -14,7 +14,6 @@ export const UserContextProvider = ({ children }) => {
   const retrieveToken = () => {
     try {
       const storedToken = Cookies.get("jwt");
-      //console.log("1. Stored token: ", storedToken);
       setToken(storedToken);
     } catch (error) {
       console.log("Error retrieving token: ", error);

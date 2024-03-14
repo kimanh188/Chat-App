@@ -1,26 +1,28 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { UserContext } from "../../../contexts/userContext.jsx";
+import { ChatContext } from "../../../contexts/chatContext.jsx";
 
 //import io from "socket.io-client";
 
-export function ChatBoxComponent({
-  selectedChat,
-  //updateSelectedChat,
-  currentUser,
-  selectedConversation,
-}) {
-  console.log("selectedChat: ", selectedChat);
+export function ChatBoxComponent({ currentUser }) {
   const { token } = useContext(UserContext);
 
   const [otherUsername, setOtherUsername] = useState("");
   const [otherUserProfileImg, setOtherUserProfileImg] = useState(null);
 
-  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
 
-  /* 
-  const conversationKey = selectedConversation.conversationKey; */
+  const { selectedChat, messages, setMessages } = useContext(ChatContext);
+
+  const chatContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [selectedChat]);
 
   const typingHandler = (event) => {
     setNewMessage(event.target.value);
@@ -58,25 +60,6 @@ export function ChatBoxComponent({
     }
   };
 
-  //fetch selected chat when changes
-
-  //chat logic to check if same sender then only shows profile img of the other one with the last message
-  /*   const isSameSender = (selectedChat, message, index, currentUser) => {
-    return (
-      index < selectedChat.length - 1 &&
-      selectedChat[index + 1].sender !== message.sender &&
-      selectedChat[index].sender !== currentUser
-    );
-  };
-
-  const isLastMessage = (selectedChat, index, currentUser) => {
-    return (
-      index === selectedChat.length - 1 &&
-      selectedChat[selectedChat.length - 1].sender !== currentUser &&
-      selectedChat[selectedChat.length - 1].sender
-    );
-  };
- */
   const responseFetchOtherUser = async (otherUsername) => {
     try {
       const response = await axios.post(
@@ -116,10 +99,15 @@ export function ChatBoxComponent({
       responseFetchOtherUser(otherUsername);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedChat, currentUser]);
+  }, [selectedChat, currentUser, messages]);
 
   if (!selectedChat.length) {
-    return null;
+    return (
+      <div className="p-5">
+        No conversation selected. Click on a chat or search for a friend to
+        start chatting.
+      </div>
+    );
   }
 
   const isSameSenderAsNext = (currentIndex) => {
@@ -134,36 +122,11 @@ export function ChatBoxComponent({
 
   return (
     <div className="w-2/3 h-screen bg-purple-800  text-gray-900 relative">
-      <div className="text-xl px-5 py-1 bg-yellow-100 w-full">
+      <div className="text-xl px-5 py-1 mb-1 bg-yellow-100 w-full">
         <button>{otherUsername}</button>
       </div>
 
-      {/*  <div className="px-5">
-        {selectedChat.map((message, index) => (
-          <div className="my-4 w-full flex items-center" key={index}>
-            <span className="text-yellow-500 font-bold float-left mr-2">
-              {message.sender === currentUser ? (
-                ""
-              ) : (
-                <img
-                  src={otherUserProfileImg}
-                  alt="profile"
-                  className="w-10 h-10 rounded-full"
-                />
-              )}
-            </span>
-
-            <span
-              className={`text-indigo-900 bg-white rounded-lg p-2 max-w-[70%] flex justify-between ${
-                message.sender === currentUser ? "ml-auto bg-pink-100" : ""
-              }`}
-            >
-              {message.message}
-            </span>
-          </div>
-        ))}
-      </div> */}
-      <div className="px-5">
+      <div className="px-5 overflow-y-auto h-5/6  " ref={chatContainerRef}>
         {selectedChat.map((message, index) => (
           <div className="my-4 w-full flex items-center" key={index}>
             {index === selectedChat.length - 1 || !isSameSenderAsNext(index) ? (
@@ -179,7 +142,7 @@ export function ChatBoxComponent({
             ) : null}
 
             <span
-              className={`text-indigo-900 bg-white rounded-lg py-1 px-2 max-w-[70%] flex justify-between ${
+              className={`text-indigo-900 bg-white rounded-lg py-1 px-2 max-w-[60%] flex justify-between ${
                 message.sender === currentUser ? "ml-auto bg-pink-100" : ""
               }
              ${
@@ -195,11 +158,14 @@ export function ChatBoxComponent({
         ))}
       </div>
 
-      <div className="absolute bottom-0 w-full">
-        <form action="" className="flex gap-2 px-5 justify-center items-center">
+      <div className=" absolute bottom-0 mt-5 w-full">
+        <form
+          action=""
+          className="flex gap-2 px-5 mt-5 justify-center items-center"
+        >
           <input
             type="text"
-            className="w-4/5 h-14 p-2 rounded-md bg-white resize-none"
+            className="w-4/5 h-14 p-2 rounded-md bg-white resize-none overflow-y-scroll"
             placeholder="Type a message"
             onChange={typingHandler}
             value={newMessage}

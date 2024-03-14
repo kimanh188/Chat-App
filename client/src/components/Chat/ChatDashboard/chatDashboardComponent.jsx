@@ -1,21 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { ChatListComponent } from "./ChatList/chatListComponent.jsx";
 import { ProfileButtonComponent } from "./ProfileImgButton/profileButtonComponent.jsx";
 import { SearchResultComponent } from "./SearchBar/searchResultComponent.jsx";
 
-export function ChatDashboardComponent({
-  token,
-  currentUser,
-  conversations,
-  chooseAConversationHandler,
-  selectedConversation,
-}) {
+import { ChatContext } from "../../../contexts/chatContext.jsx";
+
+export function ChatDashboardComponent({ token, currentUser }) {
   const [showChatList, setShowChatList] = useState(true);
   const [showCancelBtn, setShowCancelBtn] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [error, setError] = useState("");
+
+  const { conversations, chooseAConversationHandler, selectedConversation } =
+    useContext(ChatContext);
 
   const focusHandler = () => {
     setShowChatList(false);
