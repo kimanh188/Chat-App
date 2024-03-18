@@ -68,25 +68,32 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected " + socket.id);
+  //console.log("a user connected " + socket.id);
 
   socket.on("setup", (conversationKey) => {
     socket.join(conversationKey);
-    console.log(conversationKey);
+    //console.log(conversationKey);
     socket.emit("connected");
   });
 
   socket.on("joinChat", (room) => {
     socket.join(room);
-    console.log("user joined conversation: " + room);
+    //console.log("user joined conversation: " + room);
   });
 
-  socket.on("sendMessage", (message, room) => {
-    socket.to(room).emit("receiveMessage", message);
-    console.log("message: " + message + " send to room: " + room);
+  socket.on("sendMessage", (messageData, room) => {
+    const { message, sender, recipient, conversationKey } = messageData;
+
+    socket.to(room).emit("message", {
+      message,
+      sender,
+      recipient,
+      conversationKey,
+    });
+    //console.log("message `" + message + "` send to room: " + room);
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    //console.log("user disconnected");
   });
 });

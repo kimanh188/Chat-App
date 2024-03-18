@@ -19,7 +19,6 @@ export function ChatBoxComponent({ currentUser }) {
   const [otherUsername, setOtherUsername] = useState("");
   const [otherUserProfileImg, setOtherUserProfileImg] = useState(null);
   const [newMessage, setNewMessage] = useState("");
-  const [socketConnected, setSocketConnected] = useState(false);
 
   const chatContainerRef = useRef(null);
 
@@ -57,7 +56,12 @@ export function ChatBoxComponent({ currentUser }) {
 
       socket.emit(
         "sendMessage",
-        newMessage,
+        {
+          message: newMessage,
+          sender: currentUser,
+          recipient: otherUsername,
+          conversationKey: selectedConversation.conversationKey,
+        },
         selectedConversation.conversationKey
       );
     } catch (error) {
@@ -127,14 +131,13 @@ export function ChatBoxComponent({ currentUser }) {
     if (selectedConversation && selectedConversation.conversationKey) {
       //socket = io(endpoint);
       socket.emit("setup", selectedConversation.conversationKey);
-      socket.on("connected", () => console.log("Connected to socket"));
       socket.emit("joinChat", selectedConversation.conversationKey);
-      socket.on("receivedMessage", (message) => {
-        console.log("receivedMessage: ", message);
-        setSelectedChat([...selectedChat, message]);
+      socket.removeAllListeners("message");
+      socket.on("message", (messageData) => {
+        setSelectedChat((prevChat) => [...prevChat, messageData]);
       });
     }
-  }, [socket, selectedConversation, selectedChat]);
+  }, [socket, selectedConversation]);
 
   if (!selectedChat.length) {
     return (
@@ -170,7 +173,7 @@ export function ChatBoxComponent({ currentUser }) {
 
             <span
               className={`text-indigo-900 bg-white rounded-lg py-1 px-2 max-w-[60%] flex justify-between ${
-                message.sender === currentUser ? "ml-auto bg-blue-100" : ""
+                message.sender === currentUser ? "ml-auto bg-blue-200" : ""
               }
              ${
                isSameSenderAsNext(index) && message.sender !== currentUser
