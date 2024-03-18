@@ -3,26 +3,25 @@ import { useContext, useEffect, useState, useRef } from "react";
 import { UserContext } from "../../../contexts/userContext.jsx";
 import { ChatContext } from "../../../contexts/chatContext.jsx";
 
-//import io from "socket.io-client";
+/* import io from "socket.io-client";
+
+const endpoint = "http://localhost:3022";
+
+let socket; */
 
 export function ChatBoxComponent({ currentUser }) {
   const { token } = useContext(UserContext);
+  const { selectedChat, setSelectedChat, selectedConversation, socket } =
+    useContext(ChatContext);
+
+  console.log("selectedConversation: ", selectedConversation);
 
   const [otherUsername, setOtherUsername] = useState("");
   const [otherUserProfileImg, setOtherUserProfileImg] = useState(null);
-
   const [newMessage, setNewMessage] = useState("");
-
-  const { selectedChat, messages, setMessages } = useContext(ChatContext);
+  const [socketConnected, setSocketConnected] = useState(false);
 
   const chatContainerRef = useRef(null);
-
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
-    }
-  }, [selectedChat]);
 
   const typingHandler = (event) => {
     setNewMessage(event.target.value);
@@ -34,29 +33,35 @@ export function ChatBoxComponent({ currentUser }) {
     event.preventDefault();
     console.log("newMessage: ", newMessage);
 
-    if (newMessage) {
-      try {
-        const response = await axios.post(
-          "http://localhost:3022/chat",
-          {
-            message: newMessage,
-            sender: currentUser,
-            recipient: otherUsername,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            withCredentials: true,
-          }
-        );
+    if (!newMessage.trim()) return;
 
-        setMessages([...messages, response.data.answer.data]);
-        setNewMessage("");
-      } catch (error) {
-        console.log("Error sending message: ", error);
-      }
+    try {
+      const response = await axios.post(
+        "http://localhost:3022/chat",
+        {
+          message: newMessage,
+          sender: currentUser,
+          recipient: otherUsername,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+
+      setSelectedChat([...selectedChat, response.data.answer.data]);
+      setNewMessage("");
+
+      socket.emit(
+        "sendMessage",
+        newMessage,
+        selectedConversation.conversationKey
+      );
+    } catch (error) {
+      console.log("Error sending message: ", error);
     }
   };
 
@@ -89,6 +94,23 @@ export function ChatBoxComponent({ currentUser }) {
     }
   };
 
+  const isSameSenderAsNext = (currentIndex) => {
+    if (currentIndex === selectedChat.length - 1) {
+      return false; // If it's the last message -> return false
+    }
+    return (
+      selectedChat[currentIndex].sender ===
+      selectedChat[currentIndex + 1].sender
+    );
+  };
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [selectedChat]);
+
   useEffect(() => {
     if (selectedChat.length > 0) {
       const otherUsername =
@@ -99,7 +121,20 @@ export function ChatBoxComponent({ currentUser }) {
       responseFetchOtherUser(otherUsername);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedChat, currentUser, messages]);
+  }, [selectedChat, currentUser]);
+
+  useEffect(() => {
+    if (selectedConversation && selectedConversation.conversationKey) {
+      //socket = io(endpoint);
+      socket.emit("setup", selectedConversation.conversationKey);
+      socket.on("connected", () => console.log("Connected to socket"));
+      socket.emit("joinChat", selectedConversation.conversationKey);
+      socket.on("receivedMessage", (message) => {
+        console.log("receivedMessage: ", message);
+        setSelectedChat([...selectedChat, message]);
+      });
+    }
+  }, [socket, selectedConversation, selectedChat]);
 
   if (!selectedChat.length) {
     return (
@@ -109,16 +144,8 @@ export function ChatBoxComponent({ currentUser }) {
       </div>
     );
   }
-
-  const isSameSenderAsNext = (currentIndex) => {
-    if (currentIndex === selectedChat.length - 1) {
-      return false; // If it's the last message, always return false
-    }
-    return (
-      selectedChat[currentIndex].sender ===
-      selectedChat[currentIndex + 1].sender
-    );
-  };
+  console.log("otherUserProfileImg: ", otherUserProfileImg);
+  console.log("selectedChat: ", selectedChat);
 
   return (
     <div className="w-2/3 h-screen bg-purple-800  text-gray-900 relative">
@@ -126,7 +153,7 @@ export function ChatBoxComponent({ currentUser }) {
         <button>{otherUsername}</button>
       </div>
 
-      <div className="px-5 overflow-y-auto h-5/6  " ref={chatContainerRef}>
+      <div className="px-5 overflow-y-auto h-5/6" ref={chatContainerRef}>
         {selectedChat.map((message, index) => (
           <div className="my-4 w-full flex items-center" key={index}>
             {index === selectedChat.length - 1 || !isSameSenderAsNext(index) ? (
@@ -143,7 +170,7 @@ export function ChatBoxComponent({ currentUser }) {
 
             <span
               className={`text-indigo-900 bg-white rounded-lg py-1 px-2 max-w-[60%] flex justify-between ${
-                message.sender === currentUser ? "ml-auto bg-pink-100" : ""
+                message.sender === currentUser ? "ml-auto bg-blue-100" : ""
               }
              ${
                isSameSenderAsNext(index) && message.sender !== currentUser
@@ -165,7 +192,7 @@ export function ChatBoxComponent({ currentUser }) {
         >
           <input
             type="text"
-            className="w-4/5 h-14 p-2 rounded-md bg-white resize-none overflow-y-scroll"
+            className="w-4/5 h-14 p-2 rounded-md bg-white resize-none overflow-ellipsis"
             placeholder="Type a message"
             onChange={typingHandler}
             value={newMessage}

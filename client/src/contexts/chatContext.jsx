@@ -3,13 +3,18 @@ import axios from "axios";
 
 import { UserContext } from "./userContext";
 
+import io from "socket.io-client";
+
+const endpoint = "http://localhost:3022";
+
+let socket = io(endpoint);
+
 export const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [selectedChat, setSelectedChat] = useState([]);
-  const [messages, setMessages] = useState([]);
 
   const { token } = useContext(UserContext);
 
@@ -34,12 +39,14 @@ export const ChatProvider = ({ children }) => {
         );
         setSelectedConversation(selectedEntity);
 
+        socket.emit("joinChat", selectedConversation.conversationKey);
+
         const chatObjectArray = response.data.answer.data;
         setSelectedChat(chatObjectArray);
 
         console.log("selectedConversation: ", selectedConversation);
 
-        setMessages(chatObjectArray);
+        setSelectedChat(chatObjectArray);
       }
     } catch (error) {
       console.log("Error choosing a conversation: ", error);
@@ -55,9 +62,8 @@ export const ChatProvider = ({ children }) => {
         setSelectedConversation,
         selectedChat,
         setSelectedChat,
-        messages,
-        setMessages,
         chooseAConversationHandler,
+        socket,
       }}
     >
       {children}
