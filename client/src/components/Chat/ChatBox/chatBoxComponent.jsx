@@ -3,18 +3,12 @@ import { useContext, useEffect, useState, useRef } from "react";
 import { UserContext } from "../../../contexts/userContext.jsx";
 import { ChatContext } from "../../../contexts/chatContext.jsx";
 
-/* import io from "socket.io-client";
-
-const endpoint = "http://localhost:3022";
-
-let socket; */
-
 export function ChatBoxComponent({ currentUser }) {
   const { token } = useContext(UserContext);
   const { selectedChat, setSelectedChat, selectedConversation, socket } =
     useContext(ChatContext);
 
-  console.log("selectedConversation: ", selectedConversation);
+  //console.log("selectedConversation: ", selectedConversation);
 
   const [otherUsername, setOtherUsername] = useState("");
   const [otherUserProfileImg, setOtherUserProfileImg] = useState(null);
@@ -30,7 +24,7 @@ export function ChatBoxComponent({ currentUser }) {
 
   const sendMessage = async (event) => {
     event.preventDefault();
-    console.log("newMessage: ", newMessage);
+    //console.log("newMessage: ", newMessage);
 
     if (!newMessage.trim()) return;
 
@@ -137,6 +131,7 @@ export function ChatBoxComponent({ currentUser }) {
         setSelectedChat((prevChat) => [...prevChat, messageData]);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket, selectedConversation]);
 
   if (!selectedChat.length) {
@@ -147,8 +142,8 @@ export function ChatBoxComponent({ currentUser }) {
       </div>
     );
   }
-  console.log("otherUserProfileImg: ", otherUserProfileImg);
-  console.log("selectedChat: ", selectedChat);
+  //console.log("otherUserProfileImg: ", otherUserProfileImg);
+  //console.log("selectedChat: ", selectedChat);
 
   return (
     <div className="w-2/3 h-screen bg-purple-800  text-gray-900 relative">
@@ -173,7 +168,7 @@ export function ChatBoxComponent({ currentUser }) {
 
             <span
               className={`text-indigo-900 bg-white rounded-lg py-1 px-2 max-w-[60%] flex justify-between ${
-                message.sender === currentUser ? "ml-auto bg-blue-200" : ""
+                message.sender === currentUser ? "ml-auto bg-green-100" : ""
               }
              ${
                isSameSenderAsNext(index) && message.sender !== currentUser

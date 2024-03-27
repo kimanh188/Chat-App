@@ -11,6 +11,7 @@ export function UpdateVersions({ setShowUpdateVersions }) {
 
       <p className="text-justify mt-2">These updates coming soon:</p>
       <ul className="ml-6 list-disc">
+        <li>Show timestamp for chat messages (date and time)</li>
         <li>Add location and birthday to user profile</li>
         <li>Update styles for unread messages</li>
         <li>

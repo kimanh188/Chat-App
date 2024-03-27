@@ -8,10 +8,11 @@ export function ProfileImgUpload({ setShowImageUpload }) {
   const [message, setMessage] = useState("");
   const { setLoggedInProfileImg, token } = useContext(UserContext);
 
+  console.log("selectedImg: ", selectedImg);
+
   const onChangeFile = (event) => {
     setMessage("");
     const file = event.target.files[0];
-    console.log("Selected file: ", file);
     setSelectedImg(file);
   };
 
@@ -45,12 +46,9 @@ export function ProfileImgUpload({ setShowImageUpload }) {
           withCredentials: true,
         }
       );
-
-      console.log("Response from get profile img: ", getProfileImgResponse);
       setLoggedInProfileImg(getProfileImgResponse.data.answer.data.profileImg);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        console.log("Error response: ", error.response);
         setMessage(`Error: ${error.response.data.answer.message}`);
       }
       console.log("Error uploading image: ", error);

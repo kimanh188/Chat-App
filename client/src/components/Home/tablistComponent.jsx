@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { RegisterComponent } from "./Register/registerComponent.jsx";
 import { LoginComponent } from "./Login/loginComponent.jsx";
-import { TablistView } from "./view/tablistView.jsx";
+import { TablistView } from "./View/tablistView.jsx";
 
 export function TablistComponent() {
   const items = [
