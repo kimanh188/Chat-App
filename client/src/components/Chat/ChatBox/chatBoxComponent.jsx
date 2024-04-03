@@ -168,7 +168,7 @@ export function ChatBoxComponent({ currentUser }) {
 
             <span
               className={`text-indigo-900 bg-white rounded-lg py-1 px-2 max-w-[60%] flex justify-between ${
-                message.sender === currentUser ? "ml-auto bg-green-100" : ""
+                message.sender === currentUser ? "ml-auto bg-blue-100" : ""
               }
              ${
                isSameSenderAsNext(index) && message.sender !== currentUser

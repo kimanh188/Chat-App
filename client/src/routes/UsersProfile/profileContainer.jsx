@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -17,6 +18,8 @@ import UpdateIcon from "../../assets/update.svg";
 import LogoutIcon from "../../assets/logout.svg";
 
 export function UserProfilePage() {
+  const navigate = useNavigate();
+
   const { loggedInUsername, loggedInEmail, loggedInId, loggedInProfileImg } =
     useContext(UserContext);
   const storedUsername = localStorage.getItem("loggedInUsername") || "";
@@ -93,6 +96,15 @@ export function UserProfilePage() {
   return (
     <div className="h-screen p-5 bg-purple-500 relative">
       <h1 className="text-4xl pb-5 text-white">Setting</h1>
+
+      <button
+        onClick={() => {
+          navigate(-1);
+        }}
+        className="absolute bottom-5 left-5 text-white hover:text-yellow-300 hover:underline"
+      >
+        Back to Chat
+      </button>
 
       <div className="flex flex-col items-center justify-center">
         <div className="relative max-w-max">
