@@ -2,6 +2,8 @@
 
 This Chat App project is a full-stack app built using the **MERN** (MongoDB, Express.js, React, Node.js) stack, complemented with **Tailwind CSS** for streamlined styling, providing users with a platform for real-time communication. With seamless authentication using JWT tokens, users can register, login, and access various features including profile management and password modification. Leveraging Socket.IO, the app delivers instantaneous chat functionality, allowing users to connect and converse in real-time.
 
+https://github.com/kimanh188/Chat-App/assets/125377158/e715876f-5633-4a33-904e-edbc2da057b8
+
 ## Features
 
 - **Real-time Chat:** Utilizing Socket.IO, the app offers real-time chat functionality, enabling users to engage in conversations with others seamlessly.
@@ -27,5 +29,5 @@ This Chat App project is a full-stack app built using the **MERN** (MongoDB, Exp
      (Please remember to change the password after testing the password change feature.)
 7. Besides, you can login with another account to explore the real-time chat functionality:
    - Email: _marina@mail.com_
-   - Password: _Test123456_
+    - Password: _Test123456_
      (Please remember to change the password after testing the password change feature.)
